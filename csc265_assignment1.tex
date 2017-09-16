@@ -1,0 +1,45 @@
+\documentclass[10pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fullpage}
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{algorithmicx}
+
+
+\begin{document}
+
+\begin{center}
+{\bf \Large \bf CSC265H Assignment 1}\\
+\end{center}
+
+\noindent
+Yibin Zhao\\
+1002996261\\
+
+%Statement on collab.
+
+\begin{enumerate}
+
+\item %High level description
+	The idea of my algorithm is is basically a BFS on this binary tree B that starts from the root and go down 1 level per iteration. If the current node is nil then stop searching down. If the current node is smaller than the number $x$, then add 1 to the counter, which keeps track of the number of nodes which are larger then $x$, and add its left child and right child to a list of nodes for the next iteration. If the counter exceeds $k$, then return true. If there is no nodes to be performed on the next iteration and the counter does not exceed $k$, return false. Otherwise, keep iterating.
+
+\item %pseudocode
+\begin{algorithm}
+	\begin{algorithmic}[1]
+		
+	\end{algorithmic}
+\end{algorithm}
+
+\item %partial correctness
+
+\item %O(k) time
+
+\item %worst case lower bound
+
+\end{enumerate}
+
+\end{document}
