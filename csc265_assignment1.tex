@@ -6,9 +6,7 @@
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{algorithm}
-\usepackage{algorithmic}
-\usepackage{algorithmicx}
-
+\usepackage{algpseudocode}
 
 \begin{document}
 
@@ -27,12 +25,11 @@ Yibin Zhao\\
 \item %High level description
 	The idea of my algorithm is is basically a BFS on this binary tree B that starts from the root and go down 1 level per iteration. If the current node is nil then stop searching down. If the current node is smaller than the number $x$, then add 1 to the counter, which keeps track of the number of nodes which are larger then $x$, and add its left child and right child to a list of nodes for the next iteration. If the counter exceeds $k$, then return true. If there is no nodes to be performed on the next iteration and the counter does not exceed $k$, return false. Otherwise, keep iterating.
 
-\item %pseudocode
-\begin{algorithm}
-	\begin{algorithmic}[1]
+\item %TODO: add comments
+\begin{algorithmic}[1]
 	\Function{Tree-Compare}{$B,x,k$}
 		\State $i \gets 0$
-		\State $r \gets B.root$
+		\State $r \gets B$.root
 		\State Queue $Q$
 		\State \Call{ENQUEUE}{$Q, r$}
 		\While{$i < k$ and \Call{Empty}{$Q$} $==$ FALSE}
@@ -54,8 +51,8 @@ Yibin Zhao\\
 			\State \Return True
 		\EndIf
 	\EndFunction
-	\end{algorithmic}
-\end{algorithm}
+\end{algorithmic}
+
 
 \item %partial correctness
 
