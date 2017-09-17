@@ -22,23 +22,23 @@ Yibin Zhao\\
 
 \begin{enumerate}
 
-\item %High level description
+\item
 	The idea of my algorithm is is basically a BFS on this binary tree B that starts from the root and go down 1 level per iteration. If the current node is nil then stop searching down. If the current node is smaller than the number $x$, then add 1 to the counter, which keeps track of the number of nodes which are larger then $x$, and add its left child and right child to a list of nodes for the next iteration. If the counter exceeds $k$, then return true. If there is no nodes to be performed on the next iteration and the counter does not exceed $k$, return false. Otherwise, keep iterating.
 
-\item %TODO: add comments
+\item 
 \begin{algorithmic}[1]
 	\Function{Tree-Compare}{$B,x,k$}
 		\State $i \gets 0$
 		\State $r \gets B$.root
-		\State Queue $Q$
-		\State \Call{ENQUEUE}{$Q, r$}
-		\While{$i < k$ and \Call{Empty}{$Q$} $==$ FALSE}
+		\State Queue $Q$ \Comment{Initialize a queue}
+		\State \Call{ENQUEUE}{$Q, r$} \Comment{Add the root of the tree tothe queue}
+		\While{$i < k$ and \Call{Empty}{$Q$} $==$ FALSE} \Comment{The loop halts when $i$ reaches $k$ or the queue is empty}
 			\State $r \gets$ \Call{DEQUEUE}{$Q$}
 			\If{$r ==$ nil}
 				\State continue
 			\Else	\If{$r$.key $\leq x$}
 				\State continue
-			\Else
+			\Else \Comment{$r$.key $> x$}
 				\State \Call{ENQUEUE}{$Q, r$.left}
 				\State \Call{ENQUEUE}{$Q, r$.right}
 				\State $i \gets i+1$
