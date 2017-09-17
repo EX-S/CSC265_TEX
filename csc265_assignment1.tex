@@ -30,7 +30,30 @@ Yibin Zhao\\
 \item %pseudocode
 \begin{algorithm}
 	\begin{algorithmic}[1]
-		
+	\Function{Tree-Compare}{$B,x,k$}
+		\State $i \gets 0$
+		\State $r \gets B.root$
+		\State Queue $Q$
+		\State \Call{ENQUEUE}{$Q, r$}
+		\While{$i < k$ and \Call{Empty}{$Q$} $==$ FALSE}
+			\State $r \gets$ \Call{DEQUEUE}{$Q$}
+			\If{$r ==$ nil}
+				\State continue
+			\Else	\If{$r$.key $\leq x$}
+				\State continue
+			\Else
+				\State \Call{ENQUEUE}{$Q, r$.left}
+				\State \Call{ENQUEUE}{$Q, r$.right}
+				\State $i \gets i+1$
+				\EndIf
+			\EndIf
+		\EndWhile
+		\If{$i < k$}
+			\State \Return False
+		\Else
+			\State \Return True
+		\EndIf
+	\EndFunction
 	\end{algorithmic}
 \end{algorithm}
 
