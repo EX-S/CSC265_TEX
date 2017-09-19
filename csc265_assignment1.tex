@@ -34,15 +34,10 @@ Yibin Zhao\\
 		\State \Call{ENQUEUE}{$Q, r$} \Comment{Add the root of the tree tothe queue}
 		\While{$i < k$ and \Call{Empty}{$Q$} $==$ FALSE} \Comment{The loop halts when $i$ reaches $k$ or the queue is empty}
 			\State $r \gets$ \Call{DEQUEUE}{$Q$}
-			\If{$r ==$ nil}
-				\State continue
-			\Else	\If{$r$.key $\leq x$}
-				\State continue
-			\Else \Comment{$r$.key $> x$}
+			\If{$r \neq$ nil and $r$.key $> x$}
 				\State \Call{ENQUEUE}{$Q, r$.left}
 				\State \Call{ENQUEUE}{$Q, r$.right}
 				\State $i \gets i+1$
-				\EndIf
 			\EndIf
 		\EndWhile
 		\If{$i < k$}
@@ -55,6 +50,32 @@ Yibin Zhao\\
 
 
 \item %partial correctness
+	The algorithm should return True if the $k$'th largest number in the tree is greater than $x$ and False otherwise. 
+   
+ Suppose there are at least $k$ numbers larger than $x$ in B, then the $k$'th largest number is larger than $x$.
+Conversely, if the $k$'th largest number in B is large than $x$, then there at least exists $k$ numbers larger than $x$ in B is also true. 
+Thus, base on the propostion above, if we find $k$ numbers which are larger than $x$ ,then it is sufficient to return True, and if we find that there can't be $k$ numbers larger than $x$, then it is sufficient to conclude that the $k$'th largest number is no larger than $x$.
+
+
+
+    Let B be an arbitrary BST that satisfy the properties, and let $k \in \mathbb{N}$, $x \in \mathbb{R}$ be arbitrary. 
+\indent %TODO: Modify the indentation
+        Suppose the Algorithm returns True.
+By the if statement from line 14 to 18, $i \geq k$ after the while loop on line 6-13 halts.
+Before the while loop is performed, $i$ is initialized as 1 by line 2.
+Line 11 is the only excutation that could increment i, in which case, it must be performed for at least k times so that i exceeds k.
+Since line 11 belongs to the if statement from line 8 to 12, there are at least $k$ nodes which have the numbers larger than $x$ by Lemma 1.
+%TODO: Lemma 1: nodes are unique in QUEUE.
+Thus, by the proposition stated above, the $k$'th largest number in B is larger than $x$.
+
+Therefore, the Algotithem returns True $\implies$ the $k$'th largest number in B is larger than $x$. 
+
+\indent %TODO: Modify the indentation
+        Suppose the algorithm returns False.
+Then, by the if statement from line 14 to line 18, $i < k$ after the while loop.
+By the conditions on line 6, the while loop halts when $i \geq k$ or \textbf{EMPTY}($Q$) is True.
+Since, $i < k$, $Q$ is empty after the last iteration of the while loop.
+%TODO: Finish the case
 
 \item %O(k) time
 
