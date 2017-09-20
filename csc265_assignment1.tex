@@ -96,13 +96,46 @@ Thus, base on the propostion above, if we find $k$ numbers which are larger than
 \end{addmargin}
 
 \begin{addmargin}[1em]{0em}
-    \textbf{Lemma 1:} Let $P={n_1,n_2, \cdots}$ be the multiset of all nodes
-    enqueued by the algorithm performed on $B$, $k$ and $x$, then $P$ is a set.
+    \textbf{Lemma 1:} Let $P=\{n_1,n_2, \cdots\}$ be the multiset of all nodes
+    enqueued by the algorithm performed on $B$, $k$ and $x$, excluding nil.
+    Then $P$ is a set.
     \begin{proof}
         B is a BST.
         By the properties of BST, there exists a unique path for each node from
         the root, since each node could only have 1 parent.
-        %TODO
+        If the root is nil, then the multiset $P$ is empty and thus $P$ is a set.
+        Otherwise, by line 3 and 5, the root of B is enqueued into $Q$ before the first iteration of the while loop.
+        Let $P(j)$ be the multiset of all nodes enqueued in $Q$ after iteration $j$ of the while loop.
+        Let $Q(j)$ be the predicate that "P(j) is a set".
+        We want to prove that $\forall j \in N, Q(j)$
+        \textbf{Base Case:} $j = 0$
+        \begin{addmargin}[1em]{0em}
+            By the proof above, $P(0) = \{ B.root \}$ and thus, $P(0)$ is a set.
+            The base case $Q(0)$ is True.
+        \end{addmargin}}
+        \texibf{Inductive Step}
+            Assume $Q(j)$ is satisfied for some $j \in \mathbb{N}$.
+            Then, after iteration $j$ of the while loop, $P(j)$ is a set.
+            Consider after executing line 7.
+            \textit{Case 1:} $r =$ nil $\oor r.$key $\leq x$
+            \begin{addmargin}[1em]{0em}
+                The if statement on line 8 to 12 is not executed.
+                Therefore, $P(j+1) = P(j)$.
+                $Q(j)$ is true, so does $Q(j+1)$.
+            \end{addmargin}
+            \textit{Case 2:} $r \neq nil \aand r.$key $> x$
+            \begin{addmargin}[1em]{0em}
+               The condition on line 8 is satisfied and thus line 9 and 10 are excuted.
+               Since there is only 1 unique path to each node from the root, the path to r.left and r.right are unique.
+               Also, $P(j)$ is a set, which means that $r$.left and $r$.right are not elements in $P(j)$, or otherwise, r is enqueued more than once.
+               It doesn't matter if $r$.left or $r$.right is nil, since by definition of $P$, nil does not count as an element.
+               Thus, after enqueue r.left and r.right, $P(j+1)$ is still a set.
+               Hense, $Q(j+1)$
+            \end{addmargin}
+            By these two cases, we can conclude that $Q(j+1)$ is true.
+            Thus, $Q(j) \iimplies Q(j+1)$.
+            Therefore, by induction, $\forall j \in \mathbb{N}, Q(j)$.
+            Hense, $P$ is a set, no matter when the while loop halts.
     \end{proof}
 \end{addmargin}
 
@@ -125,6 +158,7 @@ Therefore, the Algotithem returns True $\iimplies$ the $k$'th largest number in 
 Then, by the if statement from line 14 to line 18, $i < k$ after the while loop.
 By the conditions on line 6, the while loop halts when $i \geq k \oor$  \textbf{EMPTY}($Q$) is True.
 Since, $i < k$, $Q$ is empty after the last iteration of the while loop.
+
 %TODO
 
 \end{addmargin}
