@@ -1,12 +1,22 @@
 \documentclass[10pt]{article}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{amsthm}
 \usepackage{fullpage}
 \usepackage{comment}
 \usepackage{graphicx}
 \usepackage{listings}
+\usepackage{enumerate}
+\usepackage{scrextend}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+
+\newcommand{\iimplies}{\mbox{ IMPLIES }}
+\newcommand{\oor}{\mbox{ OR }}
+\newcommand{\aand}{\mbox{ AND }}
+\newcommand{\nnot}{\mbox{ NOT }}
+\newcommand{\iiff}{\mbox{ IFF }}
+\newcommand{\xxor}{\mbox{ XOR }}
 
 \begin{document}
 
@@ -56,26 +66,68 @@ Yibin Zhao\\
 Conversely, if the $k$'th largest number in B is large than $x$, then there at least exists $k$ numbers larger than $x$ in B is also true. 
 Thus, base on the propostion above, if we find $k$ numbers which are larger than $x$ ,then it is sufficient to return True, and if we find that there can't be $k$ numbers larger than $x$, then it is sufficient to conclude that the $k$'th largest number is no larger than $x$.
 
+\begin{addmargin}[1em]{0em}
+    \textbf{Proposition:} The $k$'th largest number in B is larger than $x
+    \iff$ there at least exists $k$ numbers larger than $x$ in B.
+    
+    \begin{proof}
+        Suppose the $k$'th largest number in B is larger than $x$.
+        \begin{addmargin}[1em]{0em}
+            Then, the 1st to the $k-1$'th largest numbers are all greater than
+            the $k$'th largest number in B, which are all greater than $x$.
+            Thus, there at least exists $k$ numbers greater than $x$ in B.
+        \end{addmargin}
+        Therefore, the $k$'th largest number in B is larger than $x \iimplies$
+        there at least exists $k$ number larger than $x$ in B.
+
+        Suppose the $k$'th largest number in B is no greater than $x$.
+        \begin{addmargin}[1em]{0em}
+            Then, the $k+1$'th... are all no larger than $x$.
+            Thus, there are at most $k-1$ numbers greater than $x$.
+        \end{addmargin}
+        Therefore, the $k$'th largest number in B is no greater than $x
+        \iimplies$ there does not exist $k$ numbers larger than $x$ in B.
+        By contrapositive, there at least exists $k$ numbers larger than $x$ in
+        B $\iimplies$ the $k$'th largest number in B is larger than $x$.
+
+        Above all, The $k$'th largest number in B is larger than $x \iff$ there
+        at least exists $k$ numbers larger than $x$ in B.
+    \end{proof}
+\end{addmargin}
+
+\begin{addmargin}[1em]{0em}
+    \textbf{Lemma 1:} Let $P={n_1,n_2, \cdots}$ be the multiset of all nodes
+    enqueued by the algorithm performed on $B$, $k$ and $x$, then $P$ is a set.
+    \begin{proof}
+        B is a BST.
+        By the properties of BST, there exists a unique path for each node from
+        the root, since each node could only have 1 parent.
+        %TODO
+    \end{proof}
+\end{addmargin}
 
 
     Let B be an arbitrary BST that satisfy the properties, and let $k \in \mathbb{N}$, $x \in \mathbb{R}$ be arbitrary. 
-\indent %TODO: Modify the indentation
-        Suppose the Algorithm returns True.
+\begin{addmargin}[1em]{0em}
+  Suppose the Algorithm returns True.
 By the if statement from line 14 to 18, $i \geq k$ after the while loop on line 6-13 halts.
 Before the while loop is performed, $i$ is initialized as 1 by line 2.
 Line 11 is the only excutation that could increment i, in which case, it must be performed for at least k times so that i exceeds k.
 Since line 11 belongs to the if statement from line 8 to 12, there are at least $k$ nodes which have the numbers larger than $x$ by Lemma 1.
-%TODO: Lemma 1: nodes are unique in QUEUE.
+%TODO: Lemma 1
 Thus, by the proposition stated above, the $k$'th largest number in B is larger than $x$.
+\end{addmargin}
 
-Therefore, the Algotithem returns True $\implies$ the $k$'th largest number in B is larger than $x$. 
+Therefore, the Algotithem returns True $\iimplies$ the $k$'th largest number in B is larger than $x$. 
 
-\indent %TODO: Modify the indentation
-        Suppose the algorithm returns False.
+\begin{addmargin}[1em]{0em}
+  Suppose the algorithm returns False.
 Then, by the if statement from line 14 to line 18, $i < k$ after the while loop.
-By the conditions on line 6, the while loop halts when $i \geq k$ or \textbf{EMPTY}($Q$) is True.
+By the conditions on line 6, the while loop halts when $i \geq k \oor$  \textbf{EMPTY}($Q$) is True.
 Since, $i < k$, $Q$ is empty after the last iteration of the while loop.
-%TODO: Finish the case
+%TODO
+
+\end{addmargin}
 
 \item %O(k) time
 
