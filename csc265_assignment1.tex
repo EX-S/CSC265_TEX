@@ -62,106 +62,134 @@ Yibin Zhao\\
 \item %partial correctness
 	The algorithm should return True if the $k$'th largest number in the tree is greater than $x$ and False otherwise. 
    
- Suppose there are at least $k$ numbers larger than $x$ in B, then the $k$'th largest number is larger than $x$.
-Conversely, if the $k$'th largest number in B is large than $x$, then there at least exists $k$ numbers larger than $x$ in B is also true. 
-Thus, base on the propostion above, if we find $k$ numbers which are larger than $x$ ,then it is sufficient to return True, and if we find that there can't be $k$ numbers larger than $x$, then it is sufficient to conclude that the $k$'th largest number is no larger than $x$.
-
 \begin{addmargin}[1em]{0em}
     \textbf{Proposition:} The $k$'th largest number in B is larger than $x
     \iff$ there at least exists $k$ numbers larger than $x$ in B.
     
     \begin{proof}
-        Suppose the $k$'th largest number in B is larger than $x$.
+        Suppose the $k$'th largest number in B is larger than $x$. 
         \begin{addmargin}[1em]{0em}
-            Then, the 1st to the $k-1$'th largest numbers are all greater than
-            the $k$'th largest number in B, which are all greater than $x$.
-            Thus, there at least exists $k$ numbers greater than $x$ in B.
+            Then, the 1st to the $k-1$'th largest numbers are all greater than the $k$'th largest number in B, which are all greater than $x$. \\
+            Thus, there at least exists $k$ numbers greater than $x$ in B. 
         \end{addmargin}
-        Therefore, the $k$'th largest number in B is larger than $x \iimplies$
-        there at least exists $k$ number larger than $x$ in B.
+        Therefore, the $k$'th largest number in B is larger than $x \iimplies$ there at least exists $k$ number larger than $x$ in B. \\
 
         Suppose the $k$'th largest number in B is no greater than $x$.
         \begin{addmargin}[1em]{0em}
-            Then, the $k+1$'th... are all no larger than $x$.
+            Then, the $k+1$'th... are all no larger than $x$. \\
             Thus, there are at most $k-1$ numbers greater than $x$.
         \end{addmargin}
-        Therefore, the $k$'th largest number in B is no greater than $x
-        \iimplies$ there does not exist $k$ numbers larger than $x$ in B.
-        By contrapositive, there at least exists $k$ numbers larger than $x$ in
-        B $\iimplies$ the $k$'th largest number in B is larger than $x$.
+        Therefore, the $k$'th largest number in B is no greater than $x \iimplies$ there does not exist $k$ numbers larger than $x$ in B. \\
+        By contrapositive, there at least exists $k$ numbers larger than $x$ in B $\iimplies$ the $k$'th largest number in B is larger than $x$. \\
 
-        Above all, The $k$'th largest number in B is larger than $x \iff$ there
-        at least exists $k$ numbers larger than $x$ in B.
+        Above all, The $k$'th largest number in B is larger than $x \iff$ there at least exists $k$ numbers larger than $x$ in B. 
     \end{proof}
 \end{addmargin}
 
 \begin{addmargin}[1em]{0em}
-    \textbf{Lemma 1:} Let $P=\{n_1,n_2, \cdots\}$ be the multiset of all nodes
-    enqueued by the algorithm performed on $B$, $k$ and $x$, excluding nil.
+    \textbf{Lemma 1:} Let $P=\{n_1,n_2, \cdots\}$ be the multiset of all nodes enqueued by the algorithm performed on $B$, $k$ and $x$, excluding nil.
     Then $P$ is a set.
     \begin{proof}
-        B is a BST.
-        By the properties of BST, there exists a unique path for each node from
-        the root, since each node could only have 1 parent.
-        If the root is nil, then the multiset $P$ is empty and thus $P$ is a set.
-        Otherwise, by line 3 and 5, the root of B is enqueued into $Q$ before the first iteration of the while loop.
-        Let $P(j)$ be the multiset of all nodes enqueued in $Q$ after iteration $j$ of the while loop.
-        Let $Q(j)$ be the predicate that "P(j) is a set".
-        We want to prove that $\forall j \in N, Q(j)$
+        B is a BST. \\
+        By the properties of BST, there exists a unique path for each node from the root, since each node could only have 1 parent. \\
+        If the root is nil, then the multiset $P$ is empty and thus $P$ is a set. \\
+        Otherwise, by line 3 and 5, the root of B is enqueued into $Q$ before the first iteration of the while loop. \\
+        Let $P(j)$ be the multiset of all nodes enqueued in $Q$ after iteration $j$ of the while loop. \\
+        Let $Q(j)$ be the predicate that "P(j) is a set". \\
+
+        We want to prove that $\forall j \in N, Q(j)$ \\
         \textbf{Base Case:} $j = 0$
         \begin{addmargin}[1em]{0em}
-            By the proof above, $P(0) = \{ B.root \}$ and thus, $P(0)$ is a set.
+            By the proof above, $P(0) = \{ B.root \}$ and thus, $P(0)$ is a set. \\
             The base case $Q(0)$ is True.
-        \end{addmargin}}
-        \texibf{Inductive Step}
-            Assume $Q(j)$ is satisfied for some $j \in \mathbb{N}$.
-            Then, after iteration $j$ of the while loop, $P(j)$ is a set.
-            Consider after executing line 7.
+        \end{addmargin}
+        \textbf{Inductive Step:}
+            Assume $Q(j)$ is satisfied for some $j \in \mathbb{N}$. \\
+            Then, after iteration $j$ of the while loop, $P(j)$ is a set. \\
+            Consider after executing line 7. \\
             \textit{Case 1:} $r =$ nil $\oor r.$key $\leq x$
             \begin{addmargin}[1em]{0em}
-                The if statement on line 8 to 12 is not executed.
-                Therefore, $P(j+1) = P(j)$.
+                The if statement on line 8 to 12 is not executed. \\
+                Therefore, $P(j+1) = P(j)$. \\
                 $Q(j)$ is true, so does $Q(j+1)$.
             \end{addmargin}
             \textit{Case 2:} $r \neq nil \aand r.$key $> x$
             \begin{addmargin}[1em]{0em}
-               The condition on line 8 is satisfied and thus line 9 and 10 are excuted.
-               Since there is only 1 unique path to each node from the root, the path to r.left and r.right are unique.
-               Also, $P(j)$ is a set, which means that $r$.left and $r$.right are not elements in $P(j)$, or otherwise, r is enqueued more than once.
-               It doesn't matter if $r$.left or $r$.right is nil, since by definition of $P$, nil does not count as an element.
-               Thus, after enqueue r.left and r.right, $P(j+1)$ is still a set.
-               Hense, $Q(j+1)$
+               The condition on line 8 is satisfied and thus line 9 and 10 are executed. \\
+               Since there is only 1 unique path to each node from the root, the path to r.left and r.right are unique. \\
+               Also, $P(j)$ is a set, which means that $r$.left and $r$.right are not elements in $P(j)$, or otherwise, r is enqueued more than once. \\
+               It doesn't matter if $r$.left or $r$.right is nil, since by definition of $P$, nil does not count as an element. \\
+               Thus, after enqueue r.left and r.right, $P(j+1)$ is still a set. \\
+               Hense, $Q(j+1)$.
             \end{addmargin}
-            By these two cases, we can conclude that $Q(j+1)$ is true.
-            Thus, $Q(j) \iimplies Q(j+1)$.
-            Therefore, by induction, $\forall j \in \mathbb{N}, Q(j)$.
-            Hense, $P$ is a set, no matter when the while loop halts.
+            By these two cases, we can conclude that $Q(j+1)$ is true. \\
+            Thus, $Q(j) \iimplies Q(j+1)$. \\
+            Therefore, by induction, $\forall j \in \mathbb{N}, Q(j)$. \\
+            Hense, $P$ is a set.
     \end{proof}
 \end{addmargin}
 
-
+The following is the proof of partial correctness:
+\begin{proof}
     Let B be an arbitrary BST that satisfy the properties, and let $k \in \mathbb{N}$, $x \in \mathbb{R}$ be arbitrary. 
 \begin{addmargin}[1em]{0em}
-  Suppose the Algorithm returns True.
-By the if statement from line 14 to 18, $i \geq k$ after the while loop on line 6-13 halts.
-Before the while loop is performed, $i$ is initialized as 1 by line 2.
-Line 11 is the only excutation that could increment i, in which case, it must be performed for at least k times so that i exceeds k.
-Since line 11 belongs to the if statement from line 8 to 12, there are at least $k$ nodes which have the numbers larger than $x$ by Lemma 1.
-%TODO: Lemma 1
-Thus, by the proposition stated above, the $k$'th largest number in B is larger than $x$.
+  Suppose the Algorithm returns True. \\
+  By the if statement from line 14 to 18, $i \geq k$ after the while loop on line 6-13 halts. \\
+  Before the while loop is performed, $i$ is initialized as 1 by line 2. \\
+  Line 11 is the only excutation that could increment i, in which case, it must be performed for at least k times so that i exceeds k. \\
+  Since line 11 belongs to the if statement from line 8 to 12, there are at least $k$ nodes which have the numbers larger than $x$ by Lemma 1. \\
+  Thus, by the proposition stated above, the $k$'th largest number in B is larger than $x$. 
 \end{addmargin}
 
 Therefore, the Algotithem returns True $\iimplies$ the $k$'th largest number in B is larger than $x$. 
 
 \begin{addmargin}[1em]{0em}
-  Suppose the algorithm returns False.
-Then, by the if statement from line 14 to line 18, $i < k$ after the while loop.
-By the conditions on line 6, the while loop halts when $i \geq k \oor$  \textbf{EMPTY}($Q$) is True.
-Since, $i < k$, $Q$ is empty after the last iteration of the while loop.
+  Assume the algorithm returns False. \\
+  Then, by the if statement from line 14 to line 18, $i < k$ after the while loop. \\
+  By the conditions on line 6, the while loop halts when $i \geq k \oor$ \textbf{EMPTY}($Q$). \\
+  Since, $i < k$, $Q$ is empty after the last iteration of the while loop. \\
+  By Lemma 1, there are at least $i$ numbers in B larger than $x$. \\
+  Suppose there are more than $i$ numbers in B larger than $x$. \\
+  Then there at least exists a node, say $n$, not get enqueued by the algorithm. \\
+  $n$ is not the root, since the root always get enqueued at line 5. \\
+  Therefore $n$ has a parent. \\
+  Let $S = \{n_0, n_1, \cdots, n_p\}$ be the set of nodes on the path from the root of B to $n$, where $n_p = n$, $n_0$ is the root and $p$ is some integer. \\
+  Let $Q(j)$ be the predicate "$n_j \notin P \aand n_j$.key $> x$" 
 
-%TODO
-
+  We want to prove $\forall j \in \{0, 1, \cdots, p\}. Q(j)$.  \\
+  \textbf{Base Case:} $j = p$
+  \begin{addmargin}[1em]{0em}
+    By definition, $n_p = n$ and $n \notin P$. \\
+    Also, $n$.key $> x$. \\
+    Thus, $Q(p)$ holds.
+  \end{addmargin}
+  \textbf{Inductive Step:}
+  \begin{addmargin}[1em]{0em}
+    Assume $Q(j+1)$, where $j \in \{0, 1, \cdots , p-1 \}$. \\
+    Then, $n_{j+1} \notin P \aand n_{j+1}$.key $> x$. \\
+    Since $n_{j}$ is the parent of $n_{j+1}$, by the properties of $B$, the key of $n_{j}$ is greater than that of $n_{j+1}$, which is also greater than $x$. \\
+    Suppose $n_{j} \in P$. \\
+    \begin{addmargin}[1em]{0em}
+      Since $n_{j}$.key $> x$, in some iteration where $r$ is assigned $n_{j}$, the if statement is executed. \\
+      By line 9 and 10, $n_{j+1}$ must have been enqueued. \\
+      It follows that $n_{j+1} \in P$, which is contradict to $Q(j+1)$.
+    \end{addmargin}[1em]{0em}
+    Therefore, $n_{j} \notin P$ and hence, $Q(j)$ is true.
+  \end{addmargin}
+  By induction, $\forall j \in \{0, 1, \cdots, p\}. Q(j)$. \\
+  When $j = 0$, $n_0$ is the root of $B$ and we already know that the root is in $P$. \\
+  This is a contradiction. \\
+  Thus, there are only $i$ numbers in B greater than $x$. \\
+  Hence, there are less than $k$ numbers in B greater than $x$. \\
+  Equivalently, by proposition, the $k$'th largest number in B is no larger than $x$.
 \end{addmargin}
+
+Thus, the algorithm returns False $\iimplies$ the $k$'th largest number in B is no larger than $x$. \\
+By contrapositive, the $k$'th largest number in B is larger than $x$ $\iimplies$ the algorithm returns True. 
+
+Combine these two results above, the $k$'th largest number in B is larger than $x$ $\iiff$ the algorithm returns True. \\
+Hence, the algorithm is partially correct.
+\end{proof}
 
 \item %O(k) time
 
