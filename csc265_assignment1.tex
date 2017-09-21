@@ -187,11 +187,45 @@ Therefore, the Algotithem returns True $\iimplies$ the $k$'th largest number in 
 Thus, the algorithm returns False $\iimplies$ the $k$'th largest number in B is no larger than $x$. \\
 By contrapositive, the $k$'th largest number in B is larger than $x$ $\iimplies$ the algorithm returns True. 
 
-Combine these two results above, the $k$'th largest number in B is larger than $x$ $\iiff$ the algorithm returns True. \\
+Combine these two results above, and by generalization,  the $k$'th largest number in B is larger than $x$ $\iiff$ the algorithm returns True. \\
 Hence, the algorithm is partially correct.
 \end{proof}
 
 \item %O(k) time
+\begin{proof}
+Let BST $B$ that satisfy the properties and $k \in \mathbb{N}$, $x \in \mathbb{R}$, all be arbitrary. 
+
+Operations on line 2, 3, 4, 5 all run in constant time. \\
+Also the if statement from 14 to 18 runs in constant time. \\
+
+Consider the while loop. \\
+Before the 1st iteration of the while loop, the root is in $Q$ and $i = 0$. \\
+
+\textit{Case 1:} The $k$'th largest number in B is no larger than $x$. 
+\begin{addmargin}[1em]{0em}
+	The algorithm should return False, in which case $i$ is smaller than $k$ after the last iteration of the while loop. \\
+	Also, the queue $Q$ is empty after the last iteration. \\
+	Let $p$ be the number of $i$ after the last iteration of the while loop. \\
+	By the proof in part 2, there are only $p$ numbers in B larger than $x$. \\
+	Thus, the if statement from line 8 to line 12 only performs $p$ times. \\
+	Therefore, the enqueue operations on line 9 and 10 performs $2p$ times. \\
+	It follows that the total number of nodes that are enqueued is no greater then $p+2p = 3p$. \\
+	Since line 7 dequeue 1 element in $Q$ each iteration, there are at most $3p$ iterations performed. \\
+	As all operations in the while loop are constant time, the while loop runs in $O(3p) = O(p)$ time.
+	We know that $p < k$, in which case $O(p) \subset O(k)$, and thus, the while loop runs in $O(k)$ time.
+\end{addmargin}
+\textit{Case 2:} The $k$'th largerst number in B is larger than $x$. 
+\begin{addmargin}[1em]{0em}
+	The algorithm should return True. \\
+	After the last iteration of the while loop, $i$ is equal to $k$. \\
+	Similar to case 1, line 9 and 10 are performed $k$ times and there are at most $3k$ nodes enqueued into $Q$. \\
+	In this case, the queue might not be empty after the last iteration, so the while loop performs less than $3k$ times. \\
+	Since each iteration of the while loop runs in $O(1)$, the while loop runs in $O(3k) = O(k)$ time.
+\end{addmargin}
+Combine these two cases, the while loop runs in $O(k)$ time. \\
+Since line 2-5 and line 14-18 runs in $Q(1)$ time, the algorithm performed on $B, k$ and $x$ runs in $Q(k)$ time. \\
+By generalization, the algorithm runs in $O(k)$ time
+\end{proof}
 
 \item %worst case lower bound
 
