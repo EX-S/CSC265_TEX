@@ -28,7 +28,7 @@
 Yibin Zhao\\
 1002996261\\
 
-%Statement on collab.
+%TODO: Statement on collab.
 
 \begin{enumerate}
 
@@ -228,6 +228,32 @@ By generalization, the algorithm runs in $O(k)$ time
 \end{proof}
 
 \item %worst case lower bound
+Construct BST B as the following:
+\begin{enumerate}
+\item The root of B has value of $1$.
+\item If a node has a child, it must be unique.
+\item Each child is half the value of its parent.
+\end{enumerate}
+
+By the constuction, B is reduced to a link list. \\
+Let $h$ be the height of $B$ and let $k = \lfloor \frac{h}{2} \rfloor$, $x = \frac{1}{2^h}$. \\
+Let $c = 1$. \\ 
+Then, the $k$'th largest number in B is 
+\begin{align*}
+	\frac{1}{2^k} &= \frac{1}{2^{\lfloor \frac{h}{2} \rfloor}} \\
+		&\geq \frac{1}{2^\frac{h}{2}} \\
+		&> \frac{1}{2^h} \\
+		&= x
+\end{align*}
+Therefore, the $k$'th largest number in B is greater than $x$, in which case the algorithm should return True. \\
+By part 2, $i = k$ after the last iteration of the while loop. \\
+Before the while loop is executed, $i = 0$. \\
+Since line 11 is the only line to increase $i$, and it increase it by 1 each time, it must be performed $k$ times. \\
+Thus, the while loops must have at least $k$ iterations. \\
+Each iteration of the while loop have at least 1 operation (line 7).\\
+That is, there must be at least $k$ operations executed. \\
+Hence the algorithm uses at least $ck = k$ time. 
+By generalization, $\Omega(k)$ is the lower bound of the worst case running time of the algorithm. 
 
 \end{enumerate}
 
