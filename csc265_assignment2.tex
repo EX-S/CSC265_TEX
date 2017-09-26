@@ -21,7 +21,7 @@
 \begin{document}
 
 \begin{center}
-{\bf \Large \bf CSC265H Assignment 1}\\
+{\bf \Large \bf CSC265H Assignment 2}\\
 \end{center}
 
 \noindent
@@ -33,8 +33,56 @@ NO EXTRA MATERIAL CONSULTED\\
 \begin{enumerate}
 
 	\item
+	\textbf{INSERT}
+	\begin{addmargin}[1em]{0em}
+		\textit{Case 1:} Inserting to an empty tree.
+		\begin{addmargin}[1em]{0em}
+			Simply add a root to the tree and make the key equal to the element to be inserted, also, weight it 1. \\
+			There is no non-leaf node in the tree. \\
+			The root is a leaf and it has a positve integer weight. \\
+			There is only one path from the root to a leaf (the root), so the sum of the weights of the nodes on any path is the same.
+			Therefore, it is a R-tree.
+		\end{addmargin}
+		\textit{Case 2:} Inserting into an arbitrary non-empty R-tree.
+		\begin{addmargin}[1em]{0em}
+			Suppose the insertion is performed on a leaf $x$, weighted $w$. \\
+			By the properties of R-tree, $w$ is a positive integer. \\
+			The insertion give both new leaves weight 1, and thus, the property "each leaf has a positive integer weight" is satisfied. \\
+			The new internal node is weighted $w-1$. \\
+			$w-1$ is non-negative, since $w$ is a positive integer. \\
+			Then, in the new tree, each non-leaf node has a non-integer weight. \\
+			Also, each path in the subtree has a weight of $w$, which implies that the two new paths have the same weights as the path from root to $x$ on the original tree.
+			Therefore, all path from the root to a leaf have the same weight.
+			Hence, the new tree is a R-tree, since all three properties are satisfied.
+		\end{addmargin}
+
+		In conclusion, if an insertion is applied on a R-tree, the result is a R-tree.
+	\end{addmargin}
+
+	\textbf{DELETE}
+	\begin{addmargin}[1em]{0em}
+		\textit{Case 1:} Deleting from a R-tree with one node.
+		\begin{addmargin}[1em]{0em}
+			Simply delete the root of the tree and it becomes am empty R-tree.
+		\end{addmargin}
+		\textit{Case 2:} Deleting from a R-tree with more than one node.
+		\begin{addmargin}[1em]{0em}
+			Since R-tree is leaf-oriented, a deletion will always be performed on a leaf. \\
+			Suppose the leaf to be performed on is $x$ with weight $w'$. \\
+			Since the R-tree has more than one node, which means that $x$ must have a parent. \\
+			Let the parent be $p$ with weight $w$. \\
+			Since $p$ is a non-leaf node, it has two children. \\
+			That is, $x$ has a sibling $y$. \\
+			Let $w''$ be the weight of $y$. \\
+			Each path from a leaf upto $p$ has a weight of $w+w'$. \\
+			%TODO: Finish delete
+		\end{addmargin}
+	\end{addmargin}
+
+	%TODO: Rotation
 
 	\item
+	%TODO: no violation
 
 \end{enumerate}
 
