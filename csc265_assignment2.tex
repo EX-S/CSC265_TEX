@@ -75,11 +75,27 @@ NO EXTRA MATERIAL CONSULTED\\
 			That is, $x$ has a sibling $y$. \\
 			Let $w''$ be the weight of $y$. \\
 			Each path from a leaf upto $p$ has a weight of $w+w'$. \\
-			%TODO: Finish delete
+			Then, $w' \geq w''$. \\
+			$y$ might be a leaf or an internal node. \\
+			Either case, all other leaves except $x$ will remain the same after the deletion, and thus, their weights are all positive. \\
+			$x$ is a leaf, so $w'$ is positive, and $w+w'$ will also be postive. \\
+			Thus, the weight of $y$ will always be a positive integer. \\
+			Therefore, all leaves have positive weights.
+			Similarly, all other internal nodes except $p$ remain the same after the deletion. \\
+			Then, all non-leaf node have non-negative weight.\\
+			Since any path from $p$ to a leaf has a weight of $w+w'$, any path from $y$ to a leaf has a weight of $w'$. \\
+			Consider the new tree after deletion. \\
+			$x$ and $p$ are removed and $y$ replaced $p$. \\
+			The path from $y$ to a leaf of the subtree all have the same weight of $w+w''+w'-w'' = w+w'$, which is the same as the weigh from $p$ to a leaf on the original tree. \\
+			Hence, all path from a leaf to the root has the same weight.
 		\end{addmargin}
+		Therefore, if an deletion rule is applied to an R-tree, the result is an R-tree.	
 	\end{addmargin}
 
 	%TODO: Rotation
+	\textbf{ROTATION}
+	\begin{addmargin}[1em]{0em}
+	\end{addmargin}
 
 	\item
 	%TODO: no violation
