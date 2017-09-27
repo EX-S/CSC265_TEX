@@ -32,7 +32,57 @@ NO EXTRA MATERIAL CONSULTED\\
 
 \begin{enumerate}
 
-	\item
+	\item We will start the proof by proving some lemmas. 
+	\textbf{Lemma 1:} A subtree of an R-tree is also an R-tree.
+	\begin{proof}
+		Let $S$ be any subtree of an R-tree $T$. \\
+		\texit{Case 1:} $S$ is empty.
+		\begin{addmargin}[1em]{0em}
+			This is trivial, since an empty can also be an R-tree.
+		\end{addmargin}
+		\textit{Case 2:} $S$ has only 1 node.
+		\begin{addmargin}[1em]{0em}
+			The only node is the root of the subtree $S$. \\
+			Let the node be $x$. \\
+			By properties of R-tree, the weight of $x$ must be a positive
+			integer. \\
+			Since $S$ is a subtree of $T$, $x$ is the a leaf in $T$. \\
+			Then $x$ must have a positive integer weight. \\
+			Since there existes only one path in $S$, the third property will
+			always be satisfied. \\
+			Therefore, $S$ is an R-tree.
+		\end{addmargin}
+		\textit{Case 3:} $S$ has more than 1 node. \\
+		\begin{addmargin}[1em]{0em}
+			Since $S$ is a subtree of $T$, all internal nodes in $S$ are
+			internal nodes in $T$, and all leaves in $S$ are leaves in $T$. \\
+			Then the first and second properties of R-tree are automatically
+			satisfied. \\
+			Let $x$ be the root of $S$. \\
+			Since any path from the root to a leaf in $T$ have the same weight,
+			all paths from the root to a leaf through $x$ have the same weight
+			as well. \\
+			Let the weight be $w$. \\
+			There is only one path from the root of $T$ to $x$. \\
+			Let the weight of this path be $w'$. \\
+			Suppose $x$ has a weight of $w''$. \\
+			Then, any path from $x$ to a leaf will have the weight of
+			$w-w'+w''$. \\
+			That is, the third property is also satisfied. \\
+			Hence, $S$ is an R-tree.
+		\end{addmargin}
+		From all these cases, we can conclude that $S$ is an R-tree. \\
+		By generalization, a subtree of an R-tree is an R-tree. 
+	\end{proof}
+
+	\texbf{Lemma 2:} Suppose there is an R-tree $T$ with a subtree $S$. Let
+		$S'$ be an R-tree such that the weight of all path from the root to a
+		leaf have the same weight as in $S$. Replace $S$ by $S'$ and obtain a
+		new tree $T'$. Then $T'$ is an R-tree. 
+	\begin{proof}
+		%TODO
+	\end{proof}
+
 	\textbf{INSERT}
 	\begin{addmargin}[1em]{0em}
 		\textit{Case 1:} Inserting to an empty tree.
@@ -92,9 +142,62 @@ NO EXTRA MATERIAL CONSULTED\\
 		Therefore, if an deletion rule is applied to an R-tree, the result is an R-tree.	
 	\end{addmargin}
 
-	%TODO: Rotation
-	\textbf{ROTATION}
+	\textbf{REBALANCING}
 	\begin{addmargin}[1em]{0em}
+		\textit{Rule 1:}
+		\begin{addmargin}
+			The initial R-tree have a root which is not a leaf. \\
+			Changing the weight on the root won't affect the weight of any leaf
+			or any other internal node. \\
+			Also, 1 is a positive integer. \\
+			So, the first two properties of an R-tree is satisfied. \\
+			Since the weight of all path from the root to a leaf will always
+			include the weight of the root, modifying the weight of the root
+			wont affect the third property of an R-tree. \\
+			Therefore, all properties are satisfied, and thus, the new tree is
+			also an R-tree. \\
+		\end{addmargin}
+		\textit{Rule 2:}
+		\begin{addmargin}
+			Consider the subtree $t$ where $x$ is the root. \\
+			$x$ is an internal node, since it has two children. \\
+			Since $w \geq 1$, $w-1 \geq 0$ which is legal for an internal node.\\
+			Also 1 is a totally legal weight for any node. \\
+			Let $u$ and $v$ be the children of $x$, and let $c$ be the child of
+			$u$ with a weight of 0. \\
+			Let weight for any path from $x$ to a leaf be $w+k$, where $k$ is
+			some positive integer. \\
+			Then all path for the new subtree will have a weight of $w-1 + 1 +
+			(w+k) - w = w+k$, which is the same as the initial subtree. \\
+			Therefore, the new tree is an R-tree after applying rule 2.
+		\end{addmargin}
+
+		\textit{Rule 3:}
+		%TODO: Rule 3 (a) and (b)
+
+		%TODO: Rule 4
+		\texit{Rule 4:}
+		\begin{addmargin}[1em]{0em}
+		\end{addmargin}
+
+		%TODO
+		\texit{Rule 5:}
+		\begin{addmargin}[1em]{0em}
+		\end{addmargin}
+
+		%TODO
+		\texit{Rule 6:}
+		\begin{addmargin}[1em]{0em}
+		\end{addmargin}
+
+		\texit{Rule 7:}
+		%TODO: Rule 7 (a) and (b)
+
+		%TODO
+        \texit{Rule 8:}
+        \begin{addmargin}[1em]{0em}
+		\end{addmargin}
+
 	\end{addmargin}
 
 	\item
