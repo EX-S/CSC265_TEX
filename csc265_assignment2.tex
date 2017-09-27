@@ -75,14 +75,58 @@ NO EXTRA MATERIAL CONSULTED\\
 		By generalization, a subtree of an R-tree is an R-tree. 
 	\end{proof}
 
-	\texbf{Lemma 2:} Suppose there is an R-tree $T$ with a subtree $S$. Let
-		$S'$ be an R-tree such that the weight of all path from the root to a
-		leaf have the same weight as in $S$. Replace $S$ by $S'$ and obtain a
-		new tree $T'$. Then $T'$ is an R-tree. 
+	\texbf{Lemma 2:} Suppose there is an R-tree $T$ with an non-empty subtree
+		$S$. Let $S'$ be an R-tree such that the weight of all path from the
+		root to a leaf have the same weight as in $S$. Replace $S$ by $S'$ and
+		obtain a new tree $T'$. Then $T'$ is an R-tree. 
 	\begin{proof}
-		%TODO
+		Let $w$ be the weight of all path from the root of $T$ to a leaf. \\
+		Let $w'$ be the weight of all path from the root of $S$ to a leaf. \\
+		Then $w'$ is also the weight of all path from the root of $S'$ to a
+		leaf. \\
+		Since $S'$ is an R-tree, all nodes in $S'$ satisfy the first two
+		properties. \\
+		Similarly all nodes in $T$ satisfy the first two properties. \\
+		Then all unreplaced nodes in $T'$ satisfy the first two properties. \\
+		Since $S'$ is a subtree of $T'$, all internal nodes of $S'$ are
+		internal nodes of $T'$. \\
+		Similarly, all leaves of $S'$ are leaves on $T'$ \\
+		Therefore, $T'$ satisfy the fiest two properties of an R-tree. \\
+		Let the root of $S$ and $S'$ be $x$ and $x'$ respectively. \\
+		As proven in Lemma 1, all path from the root of $T$ to a leaf through
+		$x$ have the same sum of weights, which is also $w$. \\
+		Consider a path from the root of $T'$ to a leaf. \\
+		There are two possible cases:  \\
+		(1) The path includes $x'$. \\
+		(2) The path does not include $x'$. \\
+		Consider the path from case (1). 
+		\begin{addmargin}[1em]{0em}
+			The total weight of this path would be $w$, since there always
+			exists an identical path in $T$. 
+		\end{addmargin}
+		Then, consider the path from case (2)
+		\begin{addmargin}[1em]{0em}
+			Let $u$ and $u'$ be the weight of $x$ and $x'$ respectivly. \\
+			Then the only path from the root of $T$ to $x$ has a weight of
+			$w-w'+u$. \\
+			Consider the path from the root of $T$ to $x'$. \\
+			This path is almost identical to the previous one, except we
+			replace $x$ by $x'$, in which case, the path has a weight of
+			$w-w'+u'$. \\
+			Since every path from $x'$ to a leaf have the weight of $w'$, the
+			total weight of a path from the root of $T'$ to a leaf through $x'$
+			would have a weight of $w-w'+u' - u' + w' = w$. \\
+		\end{addmargin}
+		Thus, any path from the root of $T'$ to a leaf have a weight of $w$. \\
+		Therefore, $T'$ is an R-tree.
 	\end{proof}
 
+	From Lemma 1 and Lemma2, suppose we want to prove that after some operation
+	on an R-tree, the result is still an R-tree, it is sufficient to prove that
+	the subtree to be replaced and the new subtree satisfy the conditions in
+	Lemma 2.
+	
+	\begin{proof}
 	\textbf{INSERT}
 	\begin{addmargin}[1em]{0em}
 		\textit{Case 1:} Inserting to an empty tree.
@@ -199,6 +243,8 @@ NO EXTRA MATERIAL CONSULTED\\
 		\end{addmargin}
 
 	\end{addmargin}
+	
+	\end{proof}
 
 	\item
 	%TODO: no violation
