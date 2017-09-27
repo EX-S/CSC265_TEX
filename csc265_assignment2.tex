@@ -248,6 +248,55 @@ NO EXTRA MATERIAL CONSULTED\\
 
 	\item
 	%TODO: no violation
+	To prove that any R-tree can be tranformed by a series of rebalancing rules into an R-tree with no violation, we need to prove the following two propositions: \\
+	(1) For any violation within an R-tree, there always existes a rebalancing rule that could be applied to this violation. \\
+	(2) Each rebalacing rule can reduce one violation without causing other violations. \\
+
+	Before start working on (1) and (2), let's first prove some Lemmas to help us. 
+
+	\textbf{Lemma 3:} Consider an R-tree with 0-0 violation, Then there always exists an $x$ and its parent $p$, both weighted 0 such that $p$ is the root or $p$ has a positivly weighted parent $g$. \\
+	\begin{proof}
+	Let $T$ be an R-tree that have 0-0 violation. \\
+	Suppose there does not exists such $x$ and $p$. \\
+	Then $p$ must have a parent $g$, and $g$ must have 0 weight. \\
+	Let ($x_1$, $x_2$, \cdots, $x_{n-1}$, $x_{n}$) be a path from the root $x_1$ to a 0-0 violation, $x_{n}$ and its parent $x_{n-1}$. \\
+	Both $x_{n-1}$ and $x_{n}$ are weighted 0. \\
+	Suppose, there exists an $i \in \{1, 2, \cdots, n\}$ such that $x_{i}$ has a positive  weight. \\
+	Then, $x_{i+1}$ and $x_{i+2}$ cannot be both 0 weighted if they exists. \\
+	Therefore, for any $j \geq i \aand j+2 \leq n$, at leasts two of $x_{j}, x_{j+1}, x_{j+2}$ are weighted positively. \\
+	$x_{n-2}$ must exists, or otherwise, $x_{n-1}$ is the root. \\
+	Then, in $x_{n-2}, x_{n-1}$ and $x_{n}$, there must be at least two of them not weighted 0. \\
+	However, $x_{n-1}$ and $x_{n}$ both have 0 weight. \\
+	This is a contradiction. \\
+	Therefore, by generalization, for any R-tree with 0-0 violation, such $x$ and $p$ in Lemma 3 always exist. 
+	\end{proof}
+
+	(1)
+	\begin{proof}
+	First, consider a 0-0 violation in an arbitrary R-tree, say $T$. \\
+	Let $x$ be a node with weight 0, and let $p$ be its parent whose weight is also 0. \\
+	Then, $x$ is not a leaf. \\
+	Also, $x$ must have a sibling, call it $y$. \\
+	\textit{Case 1:}$p$ is the root
+	\begin{addmargin}[1em]{0em}
+		Then Rule 1 could be applied.
+	\end{addmargin}
+	\textit{Case 2:}$p$ has a parent $g$
+	\begin{addmargin}[1em]{0em}
+		Then $p$ must also have a sibling, call it $q$. 
+		\textit{Case a:} $g$ has an positive integer weight
+		\begin{addmargin}[1em]{0em}
+			If $q$ has a 0 weight, then Rule 2 could be applied. \\
+			It $q$ has a positive integer weight, then Rule 3 could be applied.
+		\end{addmargin}
+		\textit{Case b:} $g$ has 0 weight
+		\begin{addmargin}[1em]{0em}
+			By Lemma 3, we don't need to consider this case, since we can always solve other cases if there exists a 0-0 violation.
+		\end{addmargin}
+	\end{addmargin}
+	\end{proof}
+
+	%TODO: (2)
 
 \end{enumerate}
 
