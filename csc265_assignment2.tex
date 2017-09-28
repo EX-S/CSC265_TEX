@@ -255,7 +255,6 @@ NO EXTRA MATERIAL CONSULTED\\
 			Therefore, by Lemma 2, the new tree is an R-tree.
 		\end{addmargin}
 
-		%TODO
 		\textit{Rule 6:}
 		\begin{addmargin}[1em]{0em}
 			Let $S$ be the subtree whose root is $x$. \\
@@ -279,6 +278,18 @@ NO EXTRA MATERIAL CONSULTED\\
 		%TODO
         \textit{Rule 8:}
         \begin{addmargin}[1em]{0em}
+			Let $S$ be the subtree whose root is $x$. \\
+			$w$, $w'$ and be the weights of $x$ and $y$ respectively. \\
+			$w \geq 1$ and $w' > 1$. \\
+			Let $W$ be the weight of all path from $x$ to a leaf. \\
+			By the condition of rule 8, $x$, $y$ and $z$ are all internal nodes. \\
+			Since after the transformation, $x$, $y$ and $z$ are still internal nodes, and the transformation only interchanges the weight of $x$ and $z$, the properties of an R-tree regarding weight are maintained. \\
+			Consider the new subtree $S'$. \\
+			$z$ is the root of the new subtree with weight $w$. \\
+			The weight of all path from the root to a leaf through the $z$'s child further from $y$ is $(W-w-0) + w = W$. \\
+			The weight of all path from the root to a leaf through $x$ and $y$ is $(W-w-w') + w+0+w' = W$. \\
+			The weight of all path from the root to a leaf through $x$ but not $y$ is $(W-w-0) + w+0 = W$, which is equall to the weight of all path from the root of $S$ to a leaf. \\
+			Thus, by Lemma 2, the new tree is an R-tree.  
 		\end{addmargin}
 
 	\end{addmargin}
@@ -390,7 +401,7 @@ NO EXTRA MATERIAL CONSULTED\\
 	%TODO: Lemma4
 
 	Now, consider a overweight violation on node $x$ in an R-tree $T$. \\
-	Let $w$ be the weight of $x$, $w \geq 1$. \\
+	Let $w$ be the weight of $x$, $w > 1$. \\
 	\textit{Case 1:} $x$ is the root
 	\begin{addmargin}[1em]{0em}
 		Rule 4 can be applied.
@@ -424,7 +435,25 @@ NO EXTRA MATERIAL CONSULTED\\
 		\end{addmargin}
 		\textit{Case c:} $w' = 0$
 		\begin{addmargin}[1em]{0em}
-			%TODO
+			$y$ is an internal node, since a leaf cannot have a 0 weight. \\
+			Therefore, $y$ must have two children. \\
+			Let $c$ be $y$'s child further to $x$. \\
+			Let $w''$ be the weight of $c$. \\
+			\textit{Case (1):} $w'' = 0$
+			\begin{addmargin}[1em]{0em}
+				There is a 0-0 violation at $c$. \\
+				By lemma 5, we don't need to consider this case, since we can always deal with 0-0 violations in an R-tree before solving overweight violations.
+			\end{addmargin}
+			\textit{Case (2):} $w'' = 1$
+			\begin{addmargin}[1em]{0em}
+				Apply rule 8.
+			\end{addmargin}
+			\textit{Case(3)} $w'' > 1$
+			\begin{addmargin}[1em]{0em}
+				Then, there is a overweight violation at $c$. \\
+				By lemma 4, we can always solve overweight violations with greater depth of violation before solving those with lower overweight violations. \\
+				Thus, no need to consider this case.
+			\end{addmargin}
 		\end{addmargin}
 	\end{addmargin}
 	\end{proof}
