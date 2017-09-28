@@ -18,6 +18,13 @@
 \newcommand{\iiff}{\mbox{ IFF }}
 \newcommand{\xxor}{\mbox{ XOR }}
 
+\newenvironment{subproof}[1][\proofname]{%
+	\renewcommand{\qedsymbol}{$\blacksquare$}%
+	\begin{proof}[#1]%
+}{%
+	\end{proof}%
+}
+
 \begin{document}
 
 \begin{center}
@@ -32,11 +39,11 @@ NO EXTRA MATERIAL CONSULTED\\
 
 \begin{enumerate}
 
-	\item We will start the proof by proving some lemmas. 
+	\item We will start the proof by proving some lemmas.\\ 
 	\textbf{Lemma 1:} A subtree of an R-tree is also an R-tree.
 	\begin{proof}
 		Let $S$ be any subtree of an R-tree $T$. \\
-		\texit{Case 1:} $S$ is empty.
+		\textit{Case 1:} $S$ is empty.
 		\begin{addmargin}[1em]{0em}
 			This is trivial, since an empty can also be an R-tree.
 		\end{addmargin}
@@ -75,7 +82,7 @@ NO EXTRA MATERIAL CONSULTED\\
 		By generalization, a subtree of an R-tree is an R-tree. 
 	\end{proof}
 
-	\texbf{Lemma 2:} Suppose there is an R-tree $T$ with an non-empty subtree
+	\textbf{Lemma 2:} Suppose there is an R-tree $T$ with an non-empty subtree
 		$S$. Let $S'$ be an R-tree such that the weight of all path from the
 		root to a leaf have the same weight as in $S$. Replace $S$ by $S'$ and
 		obtain a new tree $T'$. Then $T'$ is an R-tree. 
@@ -189,7 +196,7 @@ NO EXTRA MATERIAL CONSULTED\\
 	\textbf{REBALANCING}
 	\begin{addmargin}[1em]{0em}
 		\textit{Rule 1:}
-		\begin{addmargin}
+		\begin{addmargin}[1em]{0em}
 			The initial R-tree have a root which is not a leaf. \\
 			Changing the weight on the root won't affect the weight of any leaf
 			or any other internal node. \\
@@ -202,7 +209,7 @@ NO EXTRA MATERIAL CONSULTED\\
 			also an R-tree. \\
 		\end{addmargin}
 		\textit{Rule 2:}
-		\begin{addmargin}
+		\begin{addmargin}[1em]{0em}
 			Consider the subtree $t$ where $x$ is the root. \\
 			$x$ is an internal node, since it has two children. \\
 			Since $w \geq 1$, $w-1 \geq 0$ which is legal for an internal node.\\
@@ -219,26 +226,58 @@ NO EXTRA MATERIAL CONSULTED\\
 		\textit{Rule 3:}
 		%TODO: Rule 3 (a) and (b)
 
-		%TODO: Rule 4
-		\texit{Rule 4:}
+		\textit{Rule 4:}
 		\begin{addmargin}[1em]{0em}
+			All other nodes remain the same. \\
+			$1$ is legal weight for any node. \\
+			Thus, the first two properties are maintained. \\
+			Since the weight of all path from the root to a leaf will always
+			include the weight of the root, modifying the weight of the root
+			won't affect the third property. \\
+			Therefore, the new tree is still an R-tree.
+		\end{addmargin}
+
+		\textit{Rule 5:}
+		\begin{addmargin}[1em]{0em}
+			Consider the subtree $S$ where $x$ is the root. \\
+			$w, w', w''$ are the weight of $x$ and its left and right child
+			respectively. \\
+			Let $W$ be the weight of all path from $x$ to a leaf. \\
+			Since $w' > 1$ and $w'' > 1$, then $w'-1 > 0$ and $w''-1 > 0$. \\
+			Thus, the first two properties are satisfied. \\
+			After the transformation, the weight of all path from $x$ through
+			its left child to a leaf is $(W - w - w') + w+1 + w'-1 = W$. \\
+			The one through its right child is $(W - w - w'') + w+1 + w''-1 =
+			W$. \\
+			It follows that, the weight of all path from the root of this
+			subtree to a leaf remains the same. \\
+			The third property of $S$ is maintained. \\
+			Therefore, by Lemma 2, the new tree is an R-tree.
 		\end{addmargin}
 
 		%TODO
-		\texit{Rule 5:}
+		\textit{Rule 6:}
 		\begin{addmargin}[1em]{0em}
+			Let $S$ be the subtree whose root is $x$. \\
+			$w$ is the weight of $x$ and $w'$ is the weight of $y$. \\
+			Let $W$ be the weight of all path from $x$ to a leaf. \\
+			$z$ is an internal node, since it has children. \\
+			Then 0 is a legal weight for $z$. \\
+			$w' > 1$, then $w'-1 > 0$ which is a legal weight for $y$. \\
+			Thus, the first and second properties of an R-tree are satisfied. \\
+			All path from the root of $S$ ($x$) through $z$ to a leaf have the
+			same weight of $(W-w-1) + w+1 + 0 = W$. \\
+			All path through $y$ have the weight of $(W-w-1-w') + w+1 + w'-1 =
+			W$, which is equal to the one of the initial subtree $S$. \\
+			Therefore, after performing the rule 6, the new tree is still an
+			R-tree.
 		\end{addmargin}
 
-		%TODO
-		\texit{Rule 6:}
-		\begin{addmargin}[1em]{0em}
-		\end{addmargin}
-
-		\texit{Rule 7:}
+		\textit{Rule 7:}
 		%TODO: Rule 7 (a) and (b)
 
 		%TODO
-        \texit{Rule 8:}
+        \textit{Rule 8:}
         \begin{addmargin}[1em]{0em}
 		\end{addmargin}
 
@@ -249,29 +288,40 @@ NO EXTRA MATERIAL CONSULTED\\
 	\item
 	%TODO: no violation
 	To prove that any R-tree can be tranformed by a series of rebalancing rules into an R-tree with no violation, we need to prove the following two propositions: \\
-	(1) For any violation within an R-tree, there always existes a rebalancing rule that could be applied to this violation. \\
+	(1) For any violation within an R-tree, there always exists a rebalancing rule that could be applied to this violation. \\
 	(2) Each rebalacing rule can reduce one violation without causing other violations. \\
+	However, depending on the rules given, there should be a certain scheme in
+	order to make things work. \\
+	And in this case, we will have to solve all the 0-0 violation first before
+	applying those rules for overweight violation. \\
+	My prove below will start with 0-0 violation and the rules for them, then
+	overweight violation and the corresponding rules. 
 
-	Before start working on (1) and (2), let's first prove some Lemmas to help us. 
+	Let's first prove some Lemmas.
 
 	\textbf{Lemma 3:} Consider an R-tree with 0-0 violation, Then there always exists an $x$ and its parent $p$, both weighted 0 such that $p$ is the root or $p$ has a positivly weighted parent $g$. \\
 	\begin{proof}
 	Let $T$ be an R-tree that have 0-0 violation. \\
-	Suppose there does not exists such $x$ and $p$. \\
+	Suppose there does not exist such $x$ and $p$. \\
 	Then $p$ must have a parent $g$, and $g$ must have 0 weight. \\
-	Let ($x_1$, $x_2$, \cdots, $x_{n-1}$, $x_{n}$) be a path from the root $x_1$ to a 0-0 violation, $x_{n}$ and its parent $x_{n-1}$. \\
+	Let $(x_1, x_2, \cdots, x_{n-1}, x_{n})$ be a path from the root $x_1$ to a 0-0 violation, $x_{n}$ and its parent $x_{n-1}$. \\
 	Both $x_{n-1}$ and $x_{n}$ are weighted 0. \\
-	Suppose, there exists an $i \in \{1, 2, \cdots, n\}$ such that $x_{i}$ has a positive  weight. \\
+	Suppose, there exists an $i \in \{1, 2, \cdots, n\}$ such that $x_{i}$ has a positive weight. \\
 	Then, $x_{i+1}$ and $x_{i+2}$ cannot be both 0 weighted if they exists. \\
 	Therefore, for any $j \geq i \aand j+2 \leq n$, at leasts two of $x_{j}, x_{j+1}, x_{j+2}$ are weighted positively. \\
 	$x_{n-2}$ must exists, or otherwise, $x_{n-1}$ is the root. \\
 	Then, in $x_{n-2}, x_{n-1}$ and $x_{n}$, there must be at least two of them not weighted 0. \\
 	However, $x_{n-1}$ and $x_{n}$ both have 0 weight. \\
 	This is a contradiction. \\
+	Then there is no such $x_{i}$. \\
+	It follows that $x_{1}$ and $x_{2}$ both have a weight of 0. \\
+	This is a contradiction, Since $x_{1}$ is the root. \\
 	Therefore, by generalization, for any R-tree with 0-0 violation, such $x$ and $p$ in Lemma 3 always exist. 
 	\end{proof}
 
-	(1)
+	By Lemma 3, we can if there exists some 0-0 violation, then we can always
+	find such a 0-0 violation stated above and deal with it first. \\
+
 	\begin{proof}
 	First, consider a 0-0 violation in an arbitrary R-tree, say $T$. \\
 	Let $x$ be a node with weight 0, and let $p$ be its parent whose weight is also 0. \\
@@ -291,7 +341,90 @@ NO EXTRA MATERIAL CONSULTED\\
 		\end{addmargin}
 		\textit{Case b:} $g$ has 0 weight
 		\begin{addmargin}[1em]{0em}
-			By Lemma 3, we don't need to consider this case, since we can always solve other cases if there exists a 0-0 violation.
+			By Lemma 3, we don't need to consider this case, since we can
+			always solve other cases first if there exists a 0-0 violation.
+		\end{addmargin}
+	\end{addmargin}
+	Therefore, if there is a 0-0 violation, there exists a rule to handle it.\\
+
+	Suppose we apply rule 1, 2 or 3 to an R-tree with 0-0 violation. We want to
+	prove the rule 1, 2 and 3 can reduce the number of 0-0 violation
+	without increasing the number of overweight violation. In the following
+	prove, suppose each corresponding condtion of these rules are satisfied. \\		
+	\textbf{Rule 1:}
+	\begin{addmargin}[1em]{0em}
+		By applying rule 1, the 0-0 violation at the root is solved and no new
+		0-0 violation occurs.\\
+		Since a weight of 1 is not considered overweight, the total number of
+		overweight violations remain the same. 
+	\end{addmargin}
+	\textbf{Rule 2:}
+	\begin{addmargin}[1em]{0em}
+		Rule 2 reduces the 0-0 violation at the grandchild of $x$, and no new
+		0-0 violation occurs. \\
+		The change of weight won't add a overweight violation. \\
+		In fact, it may reduce a overweight violation if $w > 1$ initially.
+	\end{addmargin}
+	\textbf{Rule 3:}
+	\begin{addmargin}[1em]{0em}
+		There is no need to consider (a) and (b) explicitly, since after the transform,
+		the outcomes of (a) and (b) are similar. \\
+		After the transformation, the 0-0 violation at $z$ is reduced. \\
+		Since the other child of $x$ has a postive weight, they is no 0-0
+		violation at this node after the transformation. \\
+		The weight of $z$ is 0. \\
+		Children of $z$ might have 0 weight, but after the transformation,
+		their parent (or different parents) still has 0 weight. \\
+		Thus, the number of 0-0 violations at these nodes won't change. \\
+		Similarly, the number of 0-0 violation at the other child of $y$ also
+		won't change after applying rule 3. \\
+		Therefore, rule 3 reduce the number of 0-0 violation by 1. \\
+		Now consider the change of weight. \\
+		Initially $x$, $y$, $z$ have weights of $w$, 0 and 0. \\
+		After the tranformation, the weight of them are still $w$ and two 0s,
+		just distributed differently. \\
+		All other nodes remain the same weight. \\
+		Thus, rule 3 will not increase the number of overweight violations.
+	\end{addmargin}
+	
+	%TODO: Lemma4
+
+	Now, consider a overweight violation on node $x$ in an R-tree $T$. \\
+	Let $w$ be the weight of $x$, $w \geq 1$. \\
+	\textit{Case 1:} $x$ is the root
+	\begin{addmargin}[1em]{0em}
+		Rule 4 can be applied.
+	\end{addmargin}
+	\textit{Case 2:} $x$ is not the root and $x$ is a leaf
+	\begin{addmargin}[1em]{0em}
+		Then $x$ must have a parent and a sibling, call them $p$ and $y$
+		respectively. \\
+		By lemma 1, the subtree $S$ with only $p$, $x$ and $y$ as its node is
+		an R-tree. \\
+		The sum of weights of $p,x$ and the one of $p,y$ are the same. \\
+		Then $x$ and $y$ have the same weight, and thus, $y$ is overweight. \\
+		In this case, we can use Rule 5.
+	\end{addmargin}
+	\textit{Case 3:} $x$ is neither the root nor a leaf
+	\begin{addmargin}[1em]{0em}
+		Then $x$ must have a parent $p$. \\
+		It also has a sibling $y$, since the tree is leaf-oriented. \\
+		Let $w$, $w'$, $u$ be the weight of $x$, $y$ and $p$ respectively. \\
+		\textit{Case a:} $w' > 1$
+		\begin{addmargin}[1em]{0em}
+			Apply rule 5.
+		\end{addmargin}
+		\textit{Case b:} $w' = 1$
+		\begin{addmargin}[1em]{0em}
+			$y$ must be an internal node, or otherwise, the third property of
+			R-tree wouldn't be satisfied. \\
+			Then $y$ must have two children. \\
+			If there is a child of $y$ with weight 0, apply rule 7. \\
+			Otherwise, apply rule 6.
+		\end{addmargin}
+		\textit{Case c:} $w' = 0$
+		\begin{addmargin}[1em]{0em}
+			%TODO
 		\end{addmargin}
 	\end{addmargin}
 	\end{proof}

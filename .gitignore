@@ -6,3 +6,6 @@ csc265_assignment1.dvi
 rtrees.pdf
 a2rules.pdf
 a1.pdf
+*.aux
+*.log
+*.dvi
