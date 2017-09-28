@@ -220,11 +220,29 @@ NO EXTRA MATERIAL CONSULTED\\
 			some positive integer. \\
 			Then all path for the new subtree will have a weight of $w-1 + 1 +
 			(w+k) - w = w+k$, which is the same as the initial subtree. \\
-			Therefore, the new tree is an R-tree after applying rule 2.
+			Therefore, by lemma 2, the new tree is an R-tree after applying rule 2.
 		\end{addmargin}
 
 		\textit{Rule 3:}
 		%TODO: Rule 3 (a) and (b)
+		\begin{addmargin}[1em]{0em}
+			Let those subtrees under $z$, $y$ and $x$ be, $A$, $B$, $C$ and
+			$D$. \\
+			Let $S$ be the subtree whose root is $x$, and let $W$ be the weight
+			of all path from $x$ to a leaf. \\
+			Before the transformation, the weights of all path from a root of
+			$A$, $B$, $C$ or $D$ to a leaf are all $W - w'$. \\
+			$A$, $B$, $C$ and $D$ aren't changed by the transformation. \\
+			Then all path from the root of the new subtree $S'$ to a leaf have
+			the same weight of $w +0+ (W-w) = W$, which is equall to the
+			initial weight. \\
+			Therefore, the third property holds. \\
+			Since $x$, $y$, $z$ are internal nodes initially, and are still
+			internal nodes after the transformation, interchanging the weight
+			of them won't affect the first two properties. \\
+			Hence, by lemma 2, the result of applying  rule 3 to an R-tree is
+			still an R-tree.
+		\end{addmargin}
 
 		\textit{Rule 4:}
 		\begin{addmargin}[1em]{0em}
@@ -274,8 +292,29 @@ NO EXTRA MATERIAL CONSULTED\\
 
 		\textit{Rule 7:}
 		%TODO: Rule 7 (a) and (b)
+		\begin{addmargin}[1em]{0em}
+			Let the subtree under $u$, $z$ and $x$ be $A$, $B$, $C$ and $D$
+			such that the root of $D$ is $y$. \\
+			Let $S$ be the subtree with root $x$. \\
+			Let $W$ be the weight of all path from $x$ to a leaf. \\
+			Since $w' > 1$, the weight of $y$ after the tranformation is $w'-1
+			> 0$.
+			Also, since $x$, $z$ and $u$ are all internal nodes intially, and
+			they are still internal nodes after applying rule 7, interchanging
+			their weight is totally legal. \\
+			Therefore, property 1 and 2 and maintained. \\
+			The weight of all path from a root of $A$, $B$ or $C$ to a
+			leaf is $W-w-1$. \\
+			The weight of all path from the root of $D$ to a leaf is $W-w$. \\
+			Let $S'$ be the new subtree after the transformation. \\
+			The weight of all path from the root of $S'$ to a leaf through $y$
+			is $(W-w-w') + w+1+w'-1 = W$. \\
+			The weight of all path from the root of $S'$ to a leaf in $A$, $B$
+			or $C$ is $(W-w-1)+w+1 = W$, which is equal to the intitial total
+			weight. \\
+			Hence, by lemma 2, the new tree is still an R-tree.
+		\end{addmargin}
 
-		%TODO
         \textit{Rule 8:}
         \begin{addmargin}[1em]{0em}
 			Let $S$ be the subtree whose root is $x$. \\
@@ -297,7 +336,6 @@ NO EXTRA MATERIAL CONSULTED\\
 	\end{proof}
 
 	\item
-	%TODO: no violation
 	To prove that any R-tree can be tranformed by a series of rebalancing rules into an R-tree with no violation, we need to prove the following two propositions: \\
 	(1) For any violation within an R-tree, there always exists a rebalancing rule that could be applied to this violation. \\
 	(2) Each rebalacing rule can reduce one violation without causing other violations. \\
@@ -312,6 +350,7 @@ NO EXTRA MATERIAL CONSULTED\\
 
 	\textbf{Lemma 3:} Consider an R-tree with 0-0 violation, Then there always exists an $x$ and its parent $p$, both weighted 0 such that $p$ is the root or $p$ has a positivly weighted parent $g$. \\
 	\begin{proof}
+	The proof is by well ordering priciple. \\
 	Let $T$ be an R-tree that have 0-0 violation. \\
 	Suppose there does not exist such $x$ and $p$. \\
 	Then $p$ must have a parent $g$, and $g$ must have 0 weight. \\
@@ -332,6 +371,20 @@ NO EXTRA MATERIAL CONSULTED\\
 
 	By Lemma 3, we can if there exists some 0-0 violation, then we can always
 	find such a 0-0 violation stated above and deal with it first. \\
+
+	\textbf{Lemma 4:} For any R-tree with overweight violation, there is always
+	a overweight violation with the greatest depth of violation among all
+	overweight violations. 
+
+	\begin{proof}
+		The depth of any overweigh violation is an integer and the set of
+		integer is totally ordered. \\
+		Also, the depth is always bounded by the height of the tree. \\
+		Therefore, there is always one with the greatest depth. 
+	\end{proof}
+
+	By lemma 4, suppose we have an R-tree with only overweight violations, we
+	can always solve the overweight violation with the greatest depth first. \\
 
 	\begin{proof}
 	First, consider a 0-0 violation in an arbitrary R-tree, say $T$. \\
@@ -398,7 +451,23 @@ NO EXTRA MATERIAL CONSULTED\\
 		Thus, rule 3 will not increase the number of overweight violations.
 	\end{addmargin}
 	
-	%TODO: Lemma4
+	Before moving on to overweigh violation, let's first prove the following
+	lemma.\\
+	\textbf{Lemma 5:} Any R-tree can be transformed by only rule 1, 2 and 3
+	into an R-tree with no 0-0 violations. 
+
+	\begin{subproof}
+		Let $T$ be any R-tree. \\
+		If $T$ has no 0-0 violation, no tranformation is required. \\
+		Suppose $T$ has 0-0 violation. \\
+		By lemma 3, we can always solve the 0-0 violations which satisfy the
+		condition in the lemma first. \\
+		We already know that, for such 0-0 violation, we can always apply rule
+		1, 2 or 3. \\
+		Also, each time we apply rule 1, 2 or 3, the total number of 0-0 violation
+		will ruduce by at least 1. \\
+		Therefore, they will eventually eliminate all 0-0 violations. 
+	\end{subproof}
 
 	Now, consider a overweight violation on node $x$ in an R-tree $T$. \\
 	Let $w$ be the weight of $x$, $w > 1$. \\
@@ -456,9 +525,90 @@ NO EXTRA MATERIAL CONSULTED\\
 			\end{addmargin}
 		\end{addmargin}
 	\end{addmargin}
+
+	By lemma 4, we can always assume that rule 4-8 are applied on R-tree
+	without 0-0 violation. Suppose we apply rule 4, 5, 6, 7 or 8 to an R-tree
+	with no 0-0 violation. We want to prove that these rules can reduce the
+	number of overweight violation without causing 0-0 violations. \\
+
+	\textbf{Rule 4:}
+	\begin{addmargin}[1em]{0em}
+		Since initially the weight of the root is greater than 1, making it 1
+		will certainlly reduce the number of overweight violation. \\
+		Also, weight 1 won't arise any 0-0 violation.
+	\end{addmargin}
+	\textbf{Rule 5:}
+	\begin{addmargin}[1em]{0em}
+		Let $w$, $w'$ and $w''$ be the weight of $x$ and its children. \\
+		The overweight violation at $x$ might increase by 1, but rule 5 could
+		reduce the number of violation at its children by a total of 2. \\
+		Thus, the number of overweigh violation at least reduced by 1. \\
+		Also, since $w+1$, $w'-1$, $w''-1$ are all greater than 1, there is no
+		new 0-0 violation after the transformation. 
+	\end{addmargin}
+	\textbf{Rule 6:}
+	\begin{addmargin}[1em]{0em}
+		Similar to rule 5, we al least reduce the total number of overweigh
+		violation by 
+	\end{addmargin}
+	\textbf{Rule 7:}
+	\begin{addmargin}[1em]{0em}
+		Rule 7 reduces the number of overweight violation by 1 by subtracting 1
+		to the weight of $y$. \\
+		After the tranformtion, the weight of the root of the subtree is the
+		only one that could have a 0 weight. \\
+		However, the root retain the weight of the root of the initial subtre.
+		\\
+		Therefore, no new 0-0 violation will arise from the transformation.
+	\end{addmargin}
+	\textbf{Rule 8:}
+	\begin{addmargin}[1em]{0em}
+		A child of $x$ in the new tree is a child of $z$ in the initial tree.
+		\\
+		Since the initial $z$ and the new $x$ both have the same weight of 0,
+		there is no new 0-0 violation. \\
+		If $y$ is a leaf, then rule 8 can reduce the number of overweight
+		violation by 1. \\
+		However, if $y$ is not a leaf, then the total number of overweight
+		remains the same. 
+	\end{addmargin}
+
+	We might not eliminate overweight violation, since we risk not reducing it
+	by applying Rule 8. Therefore, we need the following lemma. \\
+
+	\textbf{Lemma 6:} Rule 8 cannot be applied consecutively to a node
+	with overweight violation.
+	\begin{subproof}
+		Suppose we perform rule 8 on $x$, $y$ and $z$. \\
+		$y$ is the node with overweight violation. \\
+		After the transformation, $x$ is the parent of $y$ with weight 0. \\
+		By the condition of rule 8, to perform it on $y$ again, the parent of
+		$y$ must have a postive integer weight, while $x$ have 0 weight. \\
+		Hence, we cannot apply rule 8 to $y$ again before applying other rules
+		on $y$. \\
+	\end{subproof}
+
+	Suppose we want to transform a R-tree with only overweight violation to an
+	R-tree with no violation. \\
+	The total number of overweight violation is an intager. \\
+	By lemma 4, we can always apply the rule 4-8 to the overweigt violation
+	with the greatest depth. \\
+	Each time we apply rule 4-7, the number will decrease by at least 1. \\
+	Each time we apply rule 8 to the node with the greatest depth, the node
+	will move down by 1 and the depth of the violation will increase. \\
+	Therefore, we need to apply rules to this node consecutivly. \\
+	By lemma 6, we cannot apply rule 8 again. \\
+	However, by the above prove, there is always a rule, namely rule 4, 5, 6 or
+	7, we can apply on this node. \\
+	Thus, the total number of overweight violation still decreases. \\
+	Hence, we can eventually eliminate overweight violations by performing a
+	sequence of rebalancing rules on an R-tree without 0-0 violation. \\
+
+	Combine lemma 5 and the result above, any R-tree can be tranformed by a
+	sequence of rebalancing rules into an R-tree with no violations.
+
 	\end{proof}
 
-	%TODO: (2)
 
 \end{enumerate}
 
