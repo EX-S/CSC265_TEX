@@ -1,0 +1,128 @@
+\documentclass[10pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fullpage}
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage[shortlabels]{enumitem}
+%\usepackage{scrextend}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{verbatim}
+
+\newcommand{\iimplies}{\mbox{ IMPLIES }}
+\newcommand{\oor}{\mbox{ OR }}
+\newcommand{\aand}{\mbox{ AND }}
+\newcommand{\nnot}{\mbox{ NOT }}
+\newcommand{\iiff}{\mbox{ IFF }}
+\newcommand{\xxor}{\mbox{ XOR }}
+
+\begin{document}
+
+\begin{center}
+{\bf \Large \bf CSC265H Assignment 2}\\
+\end{center}
+
+\noindent
+Yibin Zhao\\
+1002996261\\
+NO OUTSIDE DISCUSSION\\
+NO EXTRA MATERIAL CONSULTED\\
+
+\begin{comment}
+Consider a sequence A[1..n], each of whose entries is an element of $\{1,
+\ldots, n^2\}$, that supports two operations:
+	UPDATE(i, v), for $1 \leq i \leq n$ and $v \in \{1, \ldots, n^2\}$, which
+	sets A[i] to v and 
+	ATMOST2(i,j), for $1 \leq i < j \leq n$, which returns T if A[i..j]
+	contains at most two different numbers and returns F is A[i..j] contains at
+	least three different numbers.
+
+1. Construct a data structure that performs both opertations in O(log n) time.
+
+2. Construct a data structure that performs ATMOST2 in O(1) time and UPDATE in
+O(n) time.
+
+Both data stuctures must use O(n) words, each with O(log n bits.
+
+For each data structure:
+	a. Brirfly describe it and explain why it has the required space
+	complexity.
+	b. Draw a picture of it when A[1..8]= [2,3,2,2,2,1,3,1].
+	c. Describe how to perform UPDATE.
+	d. Explain why the UPDATE algorithm is correct.
+	e. Explain ehy the UPDATE algorithm had the required time complexity.
+	f. Describe how to perform ATMOST2.
+	g. Explain why the ATMOST2 algorithm is correct.
+	h. Explain why the ATMOST2 algorithm has the required time complexity.
+\end{comment}
+
+\subsection*{2. Construct a data structure that performs ATMOST2 in O(1) tim
+and UPDATE in O(n) time.}
+
+\begin{enumerate}[a.]
+	\item % a
+		My data structure for this part is a data stucture with three arrays
+		A[1..n], AT2[1..n] and E[1..n]. 
+		A[1..n] is the array equivalent to the sequence discribed in the
+		problem. 
+		For any $i$ in $1, \ldots, n-1$, AT2[i] stores the value of the largest
+		$j$ such that ATMOST(i,j) should returns T, and E[i] stores the number
+		different from A[i] within A[i..AT2[i]]. 
+		For simplicity, AT2[n] $= n$, and E[i]=0 if there is no such different
+		number. \\
+
+		For each $v \in \{1, \ldots, n^2\}$, it needs $\lceil \log_2(n^2)
+		\rceil = \lceil 2\log_2(n) \rceil$ bits, which is in $O(log n)$. 
+		There are 3 arrays, each with $n$ words, and in total there are $3n$,
+		which is in $O(n)$. 
+
+	\item % b
+		$$
+		\begin{matrix}
+				& 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\
+			\hline
+			A	& 2 & 3 & 2 & 2 & 2 & 1 & 3 & 1 \\
+			AT2	& 5 & 5 & 6 & 6 & 6 & 8 & 8 & 8 \\
+			E	& 3 & 2 & 1 & 1 & 1 & 3 & 1 & 0
+		\end{matrix}
+		$$
+	\item % c. Describe how to perform UPDATE
+		%TODO
+		\begin{algorithmic}[1]
+			\Function{UPDATE}{$i,v$}
+				
+			\EndFunction
+		\end{algorithmic}
+	\item % d. Explain why the UPDATE algorithm is correct.
+		%TODO
+	\item % e. Explain why the UPDATE algorithm has the required time complixity.
+		%TODO
+	\item % f
+		\begin{algorithmic}[1]
+			\Function{ATMOST}{$i, j$}
+				\If{AT2[i] $< j$}
+					\State \Return F
+				\Else
+					\State \Return T
+				\EndIf
+			\EndFunction
+		\end{algorithmic}
+	\item % g
+		Suppose we perform ATMOST on A[1..n] with arguments $i, j$. By the
+		definition of AT2, if $j >$ AT2[i], then there are at least three
+		different numbers in A[i..j], in which case, the algorithm should
+		return F, and it returns F by the implimentation above. Also, by
+		definition, there are at most two different numbers in A[i..AT2[i]]. If
+		$j \leq$ AT2, A[i..j] is within A[i..AT2[i]], and thus, ATMOST2(i, j)
+		should return F. By the implimentation, it also returns F. Therefore,
+		the algorithm is correct. 
+
+	\item % h
+		The algorithm only needs one comparison and one return step. Both of
+		them runs in $O(1)$. Thus, the algorithm runs in $O(1)$ time.
+
+\end{enumerate}		
+		
+\end{document}
