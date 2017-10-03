@@ -17,11 +17,13 @@
 \newcommand{\nnot}{\mbox{ NOT }}
 \newcommand{\iiff}{\mbox{ IFF }}
 \newcommand{\xxor}{\mbox{ XOR }}
+\newcommand{\algorithmicbreak}{\textbf{break}}
+\newcommand{\Break}{\State \algorithmicbreak}
 
 \begin{document}
 
 \begin{center}
-{\bf \Large \bf CSC265H Assignment 2}\\
+{\bf \Large \bf CSC265H Assignment 3}\\
 \end{center}
 
 \noindent
@@ -92,7 +94,30 @@ and UPDATE in O(n) time.}
 		%TODO
 		\begin{algorithmic}[1]
 			\Function{UPDATE}{$i,v$}
-				
+				\State $j \gets i$
+				\State $c \gets 0$
+				\State $A[i] \gets  v$
+				\While{$c < 3 \aand j > 0$}
+					\If{$j < n$}
+						\If{A[j] = A[j+1] $\oor$ A[j] = E[j+1]}
+							\State AT2[j] $\gets$ AT2[j+1]
+							\State E[j] = A[j+1]+E[j+1]-A[j]
+						\Else
+							\State E[j] = A[j+1]
+							\State $k \gets j+1$
+							\While{$k \leq n$}
+								\If{A[k] $\neq$ A[j] $\aand$ A[k] $\neq$ E[j]}
+									\Break
+								\EndIf
+								\State $k \gets k+1$
+							\EndWhile
+							\State $k \gets k-1$
+							\State AT2[j] $\gets k$
+							\State $c \gets c+1$
+						\EndIf
+					\EndIf
+					\State $j \gets j-1$
+				\EndWhile
 			\EndFunction
 		\end{algorithmic}
 	\item % d. Explain why the UPDATE algorithm is correct.
