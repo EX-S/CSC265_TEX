@@ -91,19 +91,18 @@ and UPDATE in O(n) time.}
 		\end{matrix}
 		$$
 	\item % c. Describe how to perform UPDATE
-		%TODO
 		\begin{algorithmic}[1]
 			\Function{UPDATE}{$i,v$}
 				\State $j \gets i$
-				\State $c \gets 0$
-				\State $A[i] \gets  v$
-				\While{$c < 3 \aand j > 0$}
+				\State $A[i] \gets v$
+				\State $k \gets i$
+				\While{$j > 0 \aand k \geq i-1$}
 					\If{$j < n$}
 						\If{A[j] = A[j+1] $\oor$ A[j] = E[j+1]}
 							\State AT2[j] $\gets$ AT2[j+1]
-							\State E[j] = A[j+1]+E[j+1]-A[j]
+							\State E[j] $\gets$ A[j+1]+E[j+1]-A[j]
 						\Else
-							\State E[j] = A[j+1]
+							\State E[j] $\gets$ A[j+1]
 							\State $k \gets j+1$
 							\While{$k \leq n$}
 								\If{A[k] $\neq$ A[j] $\aand$ A[k] $\neq$ E[j]}
@@ -113,7 +112,6 @@ and UPDATE in O(n) time.}
 							\EndWhile
 							\State $k \gets k-1$
 							\State AT2[j] $\gets k$
-							\State $c \gets c+1$
 						\EndIf
 					\EndIf
 					\State $j \gets j-1$
@@ -121,9 +119,106 @@ and UPDATE in O(n) time.}
 			\EndFunction
 		\end{algorithmic}
 	\item % d. Explain why the UPDATE algorithm is correct.
-		%TODO
+		Suppose we perform the update algorithm to a sequence A[1..n]. 
+		Since for any $p$, AT2[p] and E[p] only depend on the squence A[p..n],
+		suppose we do UPDATA(i, v), we don't need to change anything for the
+		elements behind $i$. 
+		However, we might need to modify AT2 and E for all elements before $i$.
+		That is why I assign $i$ to $j$ before the outer while loop and have $j>0$
+		as one of the condition for the outer while loop. 
+
+		It is easy to see that ATMOST2 will always return true for any two
+		consecutive indices.
+		Therefore, AT2 must always exists for any index from 1 to n-1. 
+		And the value of AT2 and E at index $n$, by definition, will never change. 
+		Thus, we can ignore the case when $j = n$.
+
+		Consider two consecutive elements with the same value, then they have
+		the same AT2 and E value.
+		(Since it is an explanation, I will not prove this trivial claim) 
+		Also, if two consecutive elements on $j, j+1$ satisfy E[j+1] =
+		A[j], then E[j] = A[j+1] and AT2[j] = AT2[j+1]. 
+		(The following is a pseudo proof for this "non-trivial" claim)
+		By definition of E, E[j+1] $\neq$ A[j+1], and by the condition E[j+1] =
+		A[j]. 
+		Also ATMOST(j, j+1) always returns true. 
+		Therefore, E[j] = A[j+1].
+		Since the sequence A[j+1..AT2[j+1]] only has two distinct values A[j+1]
+		and E[j+1], and E[j+1] = A[j], A[j..AT2[j+1]] will also have the same
+		two distinct values.
+		Then AT2[j] $\leq$ AT2[j+1].
+		By definition of AT2, AT2[j] cannot exceeds AT2[j+1], and thus, AT2[j]
+		= AT2[j+1]. \\
+		By these two claims above, the if statement from line 7 to 9 is
+		correct.
+
+		Now, consider the case when none of the conditions in either of those two claims is
+		satisfied. 
+		E[j] will still equal to A[j+1] by the fact that ATMOST2(j,j+1) always
+		returns T.
+		Consider the inner while loop. 
+		If A[k] $\neq$ A[j] and A[k] $\neq$ E[j], then the sequence A[j..k] has
+		three distinct values A[j], E[j] and A[k]. 
+		If follows that ATMOST2(j, k) returns F.
+		Since $k$ goes from smaller to larger, after the while loop, $k$ will
+		be the smallest value such that ATMOST2(j, k) returns F, or $k = n+1$
+		by the condition of the loop. 
+		Then, after line 17, $k$ will be the largest value such that ATMOST2(j,
+		k) returns T.
+		That is, AT2[j] should equal to $k$.
+
+		Consider $k < i-1$ after some iteration of the while loop. 
+		Then, the else block form line 10 to 21 must be executed.
+		Since $j$ is subtracted by 1 on line 23, AT2[j+1] = $k$.
+		Then for all $p \leq j$, AT2[p] $\leq$ AT2[j+1] $< i-1$. 
+		The sequence A[1..i-1] are not being modified, which means that for all
+		$p \leq j$, the subsequence A[p..A[p]+1] remain the same.
+		Thus, for all $p \leq j$, AT2[p] and E[p] should keep the same value. 
+		Therefore, we can terminate the algorithm, since nothing in the data
+		structure needs to be updated.
+
 	\item % e. Explain why the UPDATE algorithm has the required time complixity.
-		%TODO
+		Line 2-4 are all assignments and runs in constant time.
+
+		Since $j = i$ before the first iteration and each time $j$ reduces by 1, the outer
+		while loop iterates at most $i$ times. 
+		The if statement from line 7 to 9 runs in constant time.
+		In the else block from line 11 to 20, line 11, 12, 19 and 20 are
+		assignments and they run in constant time. 
+
+		The inner while loop runs in $O(n)$, since line 17 runs in constant
+		time and the loop runs at most $n$ times by the condition.
+		In order to prove this algorithm runs in O(n) time, we will need to
+		prove that the inner while loop is executed by at most a constant
+		time, and in exact, 3.
+
+		We know that for any $j, j+1$ in 1...n, AT2[j] $\leq$ AT2[j+1], and by
+		induction, for any $p < q$ in 1...n, AT2[p] $\leq$ AT2[q].
+		If AT2[j] = AT2[j+1], then either A[j] = A[j+1] or E[j] = A[j+1], in
+		which case, the if statement on line 6 to 8 is executed. 
+		Therefore, once the inner while loop is executed, AT2[j] will always be
+		smaller than AT2[j+1] after line 20 is executed.
+		Consider the iteration of the outter while loop where the inner while
+		loop is executed for the second time. 
+		Then, after line 20, AT2[j] $\leq i-1$, or otherwise, A[j+1]...A[i] all have
+		the same value and the inner while loop has not been executed before
+		this iteration.
+		Let $j_0 = j$.
+		Now, suppose the inner while loop is executed for the third time in some
+		iteration of the outer while loop.
+		Since $j < j_0$, after line 20 is performed, AT2[j] < AT2[$j_0$].
+		Thus, AT2[j] = k < $i-1$, and the outer while loop halts after this
+		iteration.
+		Therefore, the inner while loop (or the else block) at most executes 3 times. 
+		
+		Since the else block only runs for a constant times, and each time the
+		block runs in $O(n)$, it takes $O(n)$ time for the whole algorithm. 
+		The outer while loop runs at most n times. 
+		Exclude the times where else block is performed, then the outer while
+		loop is in $O(n)$ time since the if statement runs in constant time.
+		Combine these two and line 2-4, the total run time for this algorithm
+		is $O(n)$. 
+
 	\item % f
 		\begin{algorithmic}[1]
 			\Function{ATMOST}{$i, j$}
@@ -134,6 +229,7 @@ and UPDATE in O(n) time.}
 				\EndIf
 			\EndFunction
 		\end{algorithmic}
+
 	\item % g
 		Suppose we perform ATMOST on A[1..n] with arguments $i, j$. By the
 		definition of AT2, if $j >$ AT2[i], then there are at least three
