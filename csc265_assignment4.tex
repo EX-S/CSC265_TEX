@@ -47,19 +47,36 @@ Suppose that C is initially 0.
 1. For each $v \in \{0, 1, 2, 3, 4\}$, what is the probablity that C = v after
 INCREMENT(C) has been called 4 times? 
 \end{comment}
-\item
+	\item
+		Let $X_i$ be $X$ for the $i$th time INCREMENT is called and let $C_i$ be
+		the $C$ after the $i$th time INCREMENT(C) is called. \\
+		Since $C$ is initially 0, it must increment by 1 after the first time
+		INCREMENT(C) is called. \\
+		$P(C_4=0) = P(X_1=0)P(X_2=0 \mid C_1=0)P(X_3=0 \mid C_2=0)P(X_4=0 \mid
+		C_3=0) = 0 \time \cdots = 0$ \\
+		$P(C_4=1) = P(X_1=0) \times \cdots + P(X_1=1)P(X_2=0 \mid C_1=1)P(X_3=0
+		\mid C_2=1)P(X_4=0 \mid C_3=1) = 0 + 1 \times \frac{1}{2^3} =
+		\frac{1}{8}$ \\
+		$P(C_4=2) = P(X_1=0) \times \cdots + P(X_1=1)(P(X_2=0 \mid
+		C_1=1)(P(X_3=0 \mid C_2=1)P(X_4=1 \mid C_3=1) + P(X_3=1 \mid
+		C_2=1)P(X_4=0 \mid C_3=2)) + P(X_2=1 \mid C_1=1)P(X_3=0 \mid
+		C_2=2)P(X_4=0 \mid C_3=2)) = 0 + 1 \times (\frac{1}{2} \times
+		(\frac{1}{2} \times \frac{3}{4} + \frac{1}{2} \times \frac{1}{2}) +
+		\frac{1}{2} \times \frac{3}{4} \times \frac{3}{4}) = \frac{19}{32}$ \\
+		$P(C_4=3) = $
+	
 
 \begin{comment}
 2. Write a recurrence that describes the probablity $P_{t, v}$ that C = v after
 INCREMENT(C) has been called t times, Explain your answer.
 \end{comment}
-\item
+	\item
 
 \begin{comment}
 3. Prove that if INCREMENT(C) is called t times, then the expected value of
 $2^C$ is t+1
 \end{comment}
-\item
+	\item
 
 \end{enumerate}
 
