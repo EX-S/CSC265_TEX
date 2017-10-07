@@ -9,6 +9,8 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{verbatim}
+\usepackage{amsthm}
+\usepackage{scrextend}
 
 \newcommand{\iimplies}{\mbox{ IMPLIES }}
 \newcommand{\oor}{\mbox{ OR }}
@@ -24,7 +26,7 @@
 
 
 \begin{center}
-{\bf \Larger \bf CSC265H Assignment 4} \\
+{\bf \Large \bf CSC265H Assignment 4} \\
 \end{center}
 
 \noindent
@@ -53,17 +55,30 @@ INCREMENT(C) has been called 4 times?
 		Since $C$ is initially 0, it must increment by 1 after the first time
 		INCREMENT(C) is called. \\
 		$P(C_4=0) = P(X_1=0)P(X_2=0 \mid C_1=0)P(X_3=0 \mid C_2=0)P(X_4=0 \mid
-		C_3=0) = 0 \time \cdots = 0$ \\
+		C_3=0) = 0 \times \cdots = 0$
+
 		$P(C_4=1) = P(X_1=0) \times \cdots + P(X_1=1)P(X_2=0 \mid C_1=1)P(X_3=0
 		\mid C_2=1)P(X_4=0 \mid C_3=1) = 0 + 1 \times \frac{1}{2^3} =
-		\frac{1}{8}$ \\
+		\frac{1}{8}$ 
+
 		$P(C_4=2) = P(X_1=0) \times \cdots + P(X_1=1)(P(X_2=0 \mid
 		C_1=1)(P(X_3=0 \mid C_2=1)P(X_4=1 \mid C_3=1) + P(X_3=1 \mid
 		C_2=1)P(X_4=0 \mid C_3=2)) + P(X_2=1 \mid C_1=1)P(X_3=0 \mid
 		C_2=2)P(X_4=0 \mid C_3=2)) = 0 + 1 \times (\frac{1}{2} \times
-		(\frac{1}{2} \times \frac{3}{4} + \frac{1}{2} \times \frac{1}{2}) +
-		\frac{1}{2} \times \frac{3}{4} \times \frac{3}{4}) = \frac{19}{32}$ \\
-		$P(C_4=3) = $
+		(\frac{1}{2} \times \frac{1}{2} + \frac{1}{2} \times \frac{3}{4}) +
+		\frac{1}{2} \times \frac{3}{4} \times \frac{3}{4}) = \frac{19}{32}$ 
+
+		$P(C_4=3) = P(X_1=0) \times \cdots + P(X_1=1)(P(X_2=0 \mid
+		C_1=1)P(X_3=1 \mid C_2=1)P(X_4=1 \mid C_3=2) + P(X_2=1 \mid
+		C_1=1)(P(X_3=1 \mid C_2=2)P(X_4=0 \mid C_3=3) + P(X_3=0 \mid
+		C_2=2)P(X_4=1 \mid C_3=2))) = 0 + 1 \times
+		(\frac{1}{2} \times \frac{1}{2} \times \frac{1}{4} +
+		\frac{1}{2}(\frac{1}{4} \times \frac{7}{8}) + \frac{3}{4} \times
+		\frac{1}{4}) = \frac{17}{64}$
+
+		$P(C_4=4) = P(X_1 = 1)P(X_2=1 \mid C_1=1)P(X_3=1 \mid C_2=2)P(X_4=1
+		\mid C_3=3) = 1 \times \frac{1}{2} \times \frac{1}{4} \times
+		\frac{1}{8} = \frac{1}{64}$
 	
 
 \begin{comment}
@@ -71,12 +86,81 @@ INCREMENT(C) has been called 4 times?
 INCREMENT(C) has been called t times, Explain your answer.
 \end{comment}
 	\item
+		The recurrence is:
+		\[ P_{t,v} = 
+		\begin{cases}
+			1 & \quad \text{if } t = 0 \aand v = 0 \\
+			0 & \quad \text{if } t < v \\
+			P_{t-1, v-1} \cdot \frac{1}{2^{v-1}} + P_{t-1,v} \cdot
+			\left(1-\frac{1}{2^v} \right) & \quad \text{if } 0 \leq v \leq t
+		\end{cases}
+		\]
+		where, $t, v \in \mathbb{N}$. 
+
+		Before the first time, which is the 0th time, C is always 0 initially.
+		Therefore, $P_{0,0} = 1$. 
+
+		Since each time INCREMENT(C) is called, C could only increment by at
+		most 1, which means that $v$ will never be larger than $t$. Thus, if $t
+		< v$, $P_{t, v} = 0$. 
+
+		Consider $t,v \in \mathbb{N}$ such that $v \leq t$. Since C either
+		increment by 1 or retain its value each round, $P_{t,v}$ will only
+		depend on $P_{t-1,v-1}$ and $P_{t-1, v}$. Suppose $C=v-1$ after
+		INCREMENT(C) has been called $t-1$ times, then $P(X=1 \mid C=v-1) =
+		\frac{1}{2^{v-1}}$. Suppose $C=v$ after INCREMENT(C) has been called
+		$t-1$ times, then $P(X=0 \mid C=v) = 1-\frac{1}{2^v}$. Therefore, the
+		recurrence in that case is $P_{t,v} = P_{t-1,v-1} \cdot
+		\frac{1}{2^{v-1}} + P_{t-1,v-1} \cdot \left(1-\frac{1}{2^{v}} \right)$.
 
 \begin{comment}
 3. Prove that if INCREMENT(C) is called t times, then the expected value of
 $2^C$ is t+1
 \end{comment}
 	\item
+		\begin{proof}
+			Let $P(t)$ be the predicate that "If INCREMENT(C) is called t
+			times,  $E(2^C) = t+1$", where $t \in \mathbb{N}$. We want to prove
+			that $\forall t \in \mathbb{N}. P(t)$. 
+
+			\textbf{Base Case:} $t=0$
+			\begin{addmargin}[1em]{0em}
+				$C$ is 0 initially. \\
+				$E(2^C) = E(2^0) = E(1) = 1 = t+1$. \\
+				Therefore, $P(0)$ holds.
+			\end{addmargin}
+
+			\textbf{Inductive Step:}
+			\begin{addmargin}[1em]{0em}
+				Assume $P(t)$ is true for some $t \in \mathbb{N}$. \\
+				We want to prove $P(t+1)$. \\
+				Let $C_t$ be the $C$ after INCREMENT(C) is called $t$ times. \\
+				By $P(t)$, $E(2^{C_t}) = \sum_{v=0}^{t}P_{t, v}2^v = t+1$. \\
+				Then, by the recurrence in part 2,
+				\begin{align*}
+					E(2^{C_{t+1}})
+					& = \sum_{v=0}^{t+1}P_{t+1,v}2^v \\
+					& = \sum_{v=0}^{t+1}(P_{t,v} \cdot \left(1- \frac{1}{2^v}
+					\right) + P_{t, v-1} \cdot \frac{1}{2^{v-1}}) \cdot 2^v \\
+					&= \sum_{v=0}^{t+1}P_{t,v} \cdot \left(1- frac{1}{2^v}
+					\right) \cdot 2^v + \sum_{v=0}^{t+1}P_{t,v-1} \cdot
+					\frac{1}{2^{v-1}} \cdot 2^v \\
+					&= \sum_{v=0}^{t}P_{t,v} \cdot \left(1 - \frac{1}{2^v}
+					\right) \cdot 2^v + \sum_{v=0}^{t}P_{t, v} \cdot 2 &&
+					\text{since } P_{t, t+1}=0, P_{t, -1}=0 \\
+					&= \sum_{v=0}^{t}P_{t,v} \cdot 2^v - \sum_{v=0}^{t}P_{t,v}
+					\cdot 1 + 2 \sum_{v=0}^{t}P_{t, v} \\
+					&= \sum_{v=0}^{t}P_{t,v}2^v + \sum_{v=0}^{t}P_{t,v} \\
+					&= E(2^{C_t}) + 1 \\
+					&= (t+1) + 1\\
+				\end{align*}
+				Therefore, $P(t+1)$ is true.
+			\end{addmargin}
+
+			By induction, $\forall t \in \mathbb{N}. P(t)$. \\
+			Thus, if INCREMENT(C) is called t times, then the expected value of
+			$2^C$ is t+1. 
+		\end{proof}
 
 \end{enumerate}
 
