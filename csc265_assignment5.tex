@@ -33,9 +33,132 @@ NO EXTRA MATERIAL CONSULTED\\
 	\item 
 		\begin{enumerate}
 			\item
+				Let $T$ be any Rtree.
+				Let $T'$ be the resulting Rtree after applying some rebalancing
+				rule on $T$. 
 				
-			\item
-			\item
+				\textit{Rule 1:}
+				\begin{addmargin}[1em]{0em}
+					There is a zero weight child of the root.
+					The other might be zero or overwight.
+					If $\Psi(T') > \Psi(T)$, then either $a(T)$ increment by 1
+					or $c(T)$ increment by 1.
+					Thus, the maximum increament is 4.
+				\end{addmargin}
+				\textit{Rule 2:}
+				\begin{addmargin}[1em]{0em}
+					The sibling of the 0 weight grandchild of $x$ might has 0
+					weight or might be overweight.
+					Also, $w-1$ could be 0.
+					Since there are too many possible cases, I will only show
+					the maximum case.
+					Consider all grandchilren of $x$ have 0 weight and $x$ is overweight.
+					Then $a(T') = a(T)+1, b(T') = b(T)+1, c(T') = c(T)$ and
+					$\Psi(T') = \Psi(T) + 6$.
+					Thus, the maximum increament is 6.
+				\end{addmargin}
+				\textit{Rule 3:}
+				\begin{addmargin}[1em]{0em}
+					Either (a) or (b), applying rule 3 will always increase the
+					$a(T)$ by 1 and $b(T)$ always keeps the same.
+					Since the sibling of $y$ might has a weight of 0, $c(T)$
+					might not decrease.
+					Therefore, the maximum increament in $\Psi$ is 4. 
+				\end{addmargin}
+				\textit{Rule 4:}
+				\begin{addmargin}[1em]{0em}
+					Since the weight of the root is still positive after
+					applying the rule, and the stucture of the whole tree
+					doesn't change, $\Psi(T') = \Psi(T)$.
+				\end{addmargin}
+				\textit{Rule 5:}
+				\begin{addmargin}[1em]{0em}
+					Since both children of $x$ are overweight initially, $\Psi$
+					keeps the same after the transformation. 
+				\end{addmargin}
+				\textit{Rule 6:}
+				\begin{addmargin}[1em]{0em}
+					$a(T)$ remains the same, $b(T)$ decreases by 1.
+					If $w = 0, w'' > 2$, then $c(T)$ increases by 1.
+					However, $\Psi$ always decreases since $b(T)$ decreases.
+				\end{addmargin}
+				\textit{Rule 7:}
+				\begin{addmargin}[1em]{0em}
+					(a):
+					\begin{addmargin}[1em]{0em}
+						Consider after applying the rule.
+
+						\textit{Case 1:} $u$'s two children have weight 0 and
+						$y$'s sibling has weight 0.
+						\begin{addmargin}[1em]{0em}
+							In this case, $a(T') = a(T), b(T') = b(T)$.
+							if $w' > 2$, then $c(T') = c(T)+1$.
+							Thus, $\Psi$ at most increase by 1.
+						\end{addmargin}
+						\textit{Case 2:} $u$'s two children have weight 0 and
+						$y$'s sibling has positive weight.
+						\begin{addmargin}[1em]{0em}
+							$a(T') = a(T)+1, b(T') = b(T)+1$
+							If the sibling of $y$ has weight 1, then $c(T)$
+							keeps the same value.
+							Otherwise, $c(T)$ decreases by 1.
+							Thus, $\Psi$ at most increases by 6.
+						\end{addmargin}
+						\textit{Otherwise:}
+						\begin{addmargin}[1em]{0em}
+							Since at least 1 of $u$'s child has positive
+							weight, $a(T)$ can not increase.
+							$b(T)$ can increase by at most 2, and $c(T)$ can
+							increase by at most 2.
+							Therefore, the increment on $\Psi$ is smaller or
+							equal to 6.
+						\end{addmargin}
+						Combine all these cases, the maximum amount $\Psi$ can
+						increase is 6.
+					\end{addmargin}
+					(b):
+					\begin{addmargin}[1em]{0em}
+						Consider after performing the transformation.
+
+						\textit{Case 1:} $z$'s two children have weight 0, and
+						$y$'s sibling has 0 weight.
+						\begin{addmargin}[1em]{0em}
+							Same as (a) Case 1.
+						\end{addmargin}
+						\textit{Case 2:} $z$'s two children have weight 0, and
+						$y$'s sibling has positive weight.
+						\begin{addmargin}[1em]{0em}
+							Then, $a(T') = a(T)$, since the sibling of $y$ was
+							a child of $u$ instead of $z$.
+							$b(T') = b(T)+1$.
+							$c(T') = c(T)$ if the sibling of $y$ has weight 1,
+							or otherwise, $c(T') = c(T)-1$.
+							Thus, $\Psi$ at most increases by 2.
+						\end{addmargin}
+						\textit{Case 3:} Otherwise.
+						\begin{addmargin}[1em]{0em}
+							$a(T')$ always less than or equal to $a(T)$. 
+							Similar to (a) Casa 3, $b(T)$ at most increases by
+							2 and $c(T)$ at most increases by 2.
+							Thus, $\Psi$ at most increases by 6.
+						\end{addmargin}
+						Hence, $\Psi$ at most increases by 6.
+					\end{addmargin}
+					Combine both (a) and (b), we can conclude that the maximum
+					increament on $\Psi$ is 6 for rule 7.
+				\end{addmargin}
+				\textit{Rule 8:}
+				\begin{addmargin}[1em]{0em}
+					In this case, $\Psi$ can not increase.
+				\end{addmargin}
+
+				Combining all 8 reblancing rules, the maximum amount $\Psi$ can
+				increase as the result of the application of one revalancing
+				rule is 6. 
+				Thus the upper bound $m=6$.
+
+			\item %TODO
+			\item %TODO
 		\end{enumerate}
 \end{enumerate}
 
