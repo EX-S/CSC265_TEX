@@ -149,7 +149,7 @@ NO EXTRA MATERIAL CONSULTED\\
 				\end{addmargin}
 				\textit{Rule 8:}
 				\begin{addmargin}[1em]{0em}
-					In this case, $\Psi$ can not increase.
+					In this case, $\Psi$ can not increase, since $c(T)$ always decrease by 1 and $a(T), b(T)$ keep their value.
 				\end{addmargin}
 
 				Combining all 8 reblancing rules, the maximum amount $\Psi$ can
@@ -157,8 +157,24 @@ NO EXTRA MATERIAL CONSULTED\\
 				rule is 6. 
 				Thus the upper bound $m=6$.
 
+			\item
+				By assignment 2, we already known that applying rule 1 to 7 at least decrease the number of violations in the Rtree by 1.
+				Therefore, for rule 1 to 7, suppose $T'$ is the resulting Rtree, then $\Phi(T') = (m+1)v(T') + \Psi(T') \leq (m+1)(v(T) - 1) + (m + \Psi(T)) = (m+1)v(T) + \Psi(T) - 1$.
+				$\Phi$ decreases by at least 1.
+
+				Now consider applying the rule 8. 
+				The number of violation in the Rtree might not decrease in this case. 
+				But, still by assignment2, the number of violation would not increase.
+				By (a), the $c(T)$ decrease by 1 and $a(T), b(T)$ keep their value.
+				Thus, $\Psi(T)$ decrease by 1 after applying rule 8.
+				Therefore, $\Phi(T') = (m+1)v(T') + \Psi(T') = (m+1)v(T') + \Psi(T)-1 \leq (m+1)v(T) + \Psi(T) - 1$ and $\Phi$ decreases by at least 1.
+
+				Thus, combine rule 1 to 7 and rule 8, $\Phi$ decreases by at least 1.
+			
 			\item %TODO
-			\item %TODO
+				Since Rtree is lead oriented, an Rtree with exactly one leaf is an Rtree with only one node.
+				Since deletion requires a pointer to an element in the Rtree, the total number of deletions in $\sigma$ is at most $\left\lceil \frac{m}{2} \right\rceil$.
+
 		\end{enumerate}
 \end{enumerate}
 
