@@ -174,7 +174,31 @@ NO EXTRA MATERIAL CONSULTED\\
 			\item %TODO
 				Since Rtree is lead oriented, an Rtree with exactly one leaf is an Rtree with only one node.
 				Since deletion requires a pointer to an element in the Rtree, the total number of deletions in $\sigma$ is at most $\left\lceil \frac{m}{2} \right\rceil$.
+				
+				Let $T_i$ be the Rtree after the $i$th operation in sequence $\sigma$ on the Rtree.
+				Let $c_i$ be the actual cost of the $i$th operation.
+				Let $a_i$ be the amartized cost of the $i$the operation.
 
+				Initially, $\Phi(T_0) = (m+1)v(T_0) + \Psi(T_0) = 0$, since there is only one node in the tree.
+
+				\textbf{INSERTION}
+					Suppose inserting under node $x$ with weight $w$. 
+					Since the tree is leaf oriented tree, $x$ must be a leaf.
+					Thus, $w \geq 1$.
+					\textit{Case 1:} w = 1
+					\begin{addmargin}[1em]{0em}
+						Then, $c(T_i) = c(T_{i-1})$.
+
+						If $a(T_{i-1})$ increses by 1, in which case $b(T_i) = b(T_{i-1})$, and the number of violation maintains its value.
+
+						Otherwise, $a(T_i) = a(T_{i-1})$.
+						If $x$ has no parent, then $b(T_i) = b (T_{i-1})$.
+
+						If $x$ has a parent, then $x$ must have a sibling, say $y$.
+						$y$ has either 0 weight or 1 weight by the properties of an Rtree.
+						Since we assume $a(T_i) = a(T_{i-1})$ in this case, then either the parent of $x$ has 0 weight or $y$ has a weight of 1.
+
+					\end{addmargin}
 		\end{enumerate}
 \end{enumerate}
 
