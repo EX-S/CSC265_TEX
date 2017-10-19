@@ -180,12 +180,14 @@ NO EXTRA MATERIAL CONSULTED\\
 				Let $a_i$ be the amartized cost of the $i$the operation.
 
 				Initially, $\Phi(T_0) = (m+1)v(T_0) + \Psi(T_0) = 0$, since there is only one node in the tree.
+				Since, $v(T) \geq 0$ and $\Psi(T) \geq 0$ for any Rtree $T$, $\Phi(T) \geq 0$. 
 
 				\textbf{INSERTION}
+				\begin{addmargin}
 					Suppose inserting under node $x$ with weight $w$. 
 					Since the tree is leaf oriented tree, $x$ must be a leaf.
-					Thus, $w \geq 1$.
-					\textit{Case 1:} w = 1
+					Thus, $w \geq 1$ \\.
+					\textit{Case 1:} $w = 1$
 					\begin{addmargin}[1em]{0em}
 						Then, $c(T_i) = c(T_{i-1})$.
 
@@ -197,8 +199,29 @@ NO EXTRA MATERIAL CONSULTED\\
 						If $x$ has a parent, then $x$ must have a sibling, say $y$.
 						$y$ has either 0 weight or 1 weight by the properties of an Rtree.
 						Since we assume $a(T_i) = a(T_{i-1})$ in this case, then either the parent of $x$ has 0 weight or $y$ has a weight of 1.
-
+						%TODO
 					\end{addmargin}
+					\textit{Case 2:} $w \geq 1$
+					\begin{addmargin}[1em]{0em}
+						%TODO
+					\end{addmargin}
+				\end{addmargin}
+				
+				\textbf{DELETION}
+				%TODO
+
+				\textbf{REBALANCING}
+				\begin{addmargin}
+				Let the true cost of a single rotation be $r$.
+				Then a double rotation has a cost of $2r$.
+				Let the change of weight on a node with a true cost of 1.
+				Then, rule 1 has a true cost of 1, rule 2 has a true cost of 3, rule 3(a) has a true cost of $r$, rule 3(b) has a true cost of $2r$, 
+				rule 4 has a true cost of 1, rule 5 has a true cost of 3, rule 6 has a true cost of 3, rule 7(a) has a true cost of $r+3$, 7(b) has a ture cost of $2r=3$,
+				and rule 8 has a true cost of $r+2$.
+				Therefore, the upperbound of the true cost $c_i$ of applying a rebalancing rule  is $2r+3$.
+				By (b), we know that $\Phi(T_i) - \Phi(T_{i-1}) \leq -1$.
+				Then $a_i = c_i + \Phi(T_i) - \Phi(T_{i-1}) \leq 2r+3 + (-1) = 2r+2$
+				\end{addmargin}
 		\end{enumerate}
 \end{enumerate}
 
