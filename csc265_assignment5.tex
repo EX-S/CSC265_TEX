@@ -17,6 +17,10 @@
 %\newcommand{\algorithmicbreak}{\textbf{break}}
 %\newcommand{\Break}{\State \algorithmicbreak}
 
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
 \begin{document}
 
 \begin{center}
@@ -172,6 +176,41 @@ NO EXTRA MATERIAL CONSULTED\\
 				Thus, combine rule 1 to 7 and rule 8, $\Phi$ decreases by at least 1.
 			
 			\item %TODO
+				\begin{lemma}
+					The total number of violations after performing any
+					sequence $\sigma$ consisting of a total of $m$ insert
+					and delete operations and the application of any number of
+					rebalancing rules to an Rtree with one node is no greater
+					than $m+w-1$, where $w$ is the weight of the node in the
+					initial tree.
+				\end{lemma}
+				\begin{proof}
+					Let $T_0$ be the initial Rtree.
+					$T_i$ be the tree after the $i$th operation.
+					Let $v_{i,j}$ be the number of violations in the Rtree after the
+					$i$th operation, where $j$ is the number of insertion and
+					deletion that have been performed. 
+					Let $P(i,j)$ be the predicate "$v_{i,j} \leq j+w-1$", where $i
+					\in \mathbb{N}, j = 0, 1, \cdots, m$.
+					Note that $i \geq j$.
+					
+					\textbf{Base Case:} $j=0$
+					\begin{addmargin}[1em]{0em}
+						Since $T_0$ only has one node with a weight of $w$,
+						there could only be overweight violations in $T_0$, and
+						the total number of violations in this tree is $w-1$.
+						Thus $P(0)$ holds.
+					\end{addmargin}
+
+					\textbf{Inductive Step:}
+					\begin{addmargin}[1em]{0em}
+						Suppose $P(i, j)$ is true for some $i$ and $j$, where
+						$i \geq j$. 
+
+					\end{addmargin}
+
+				\end{proof}
+
 				Since Rtree is lead oriented, an Rtree with exactly one leaf is an Rtree with only one node.
 				Since deletion requires a pointer to an element in the Rtree, the total number of deletions in $\sigma$ is at most $\left\lceil \frac{m}{2} \right\rceil$.
 				
