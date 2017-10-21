@@ -1,6 +1,7 @@
 \documentclass[10pt]{article}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{amsthm}
 \usepackage{fullpage}
 \usepackage{comment}
 \usepackage{graphicx}
@@ -175,92 +176,169 @@ NO EXTRA MATERIAL CONSULTED\\
 
 				Thus, combine rule 1 to 7 and rule 8, $\Phi$ decreases by at least 1.
 			
-			\item %TODO
-				\begin{lemma}
-					The total number of violations after performing any
-					sequence $\sigma$ consisting of a total of $m$ insert
-					and delete operations and the application of any number of
-					rebalancing rules to an Rtree with one node is no greater
-					than $m+w-1$, where $w$ is the weight of the node in the
-					initial tree.
-				\end{lemma}
-				\begin{proof}
-					Let $T_0$ be the initial Rtree.
-					$T_i$ be the tree after the $i$th operation.
-					Let $v_{i,j}$ be the number of violations in the Rtree after the
-					$i$th operation, where $j$ is the number of insertion and
-					deletion that have been performed. 
-					Let $P(i,j)$ be the predicate "$v_{i,j} \leq j+w-1$", where $i
-					\in \mathbb{N}, j = 0, 1, \cdots, m$.
-					Note that $i \geq j$.
-					
-					\textbf{Base Case:} $j=0$
-					\begin{addmargin}[1em]{0em}
-						Since $T_0$ only has one node with a weight of $w$,
-						there could only be overweight violations in $T_0$, and
-						the total number of violations in this tree is $w-1$.
-						Thus $P(0)$ holds.
-					\end{addmargin}
-
-					\textbf{Inductive Step:}
-					\begin{addmargin}[1em]{0em}
-						Suppose $P(i, j)$ is true for some $i$ and $j$, where
-						$i \geq j$. 
-
-					\end{addmargin}
-
-				\end{proof}
-
-				Since Rtree is lead oriented, an Rtree with exactly one leaf is an Rtree with only one node.
-				Since deletion requires a pointer to an element in the Rtree, the total number of deletions in $\sigma$ is at most $\left\lceil \frac{m}{2} \right\rceil$.
-				
+			\item 
 				Let $T_i$ be the Rtree after the $i$th operation in sequence $\sigma$ on the Rtree.
 				Let $c_i$ be the actual cost of the $i$th operation.
 				Let $a_i$ be the amartized cost of the $i$the operation.
 
-				Initially, $\Phi(T_0) = (m+1)v(T_0) + \Psi(T_0) = 0$, since there is only one node in the tree.
-				Since, $v(T) \geq 0$ and $\Psi(T) \geq 0$ for any Rtree $T$, $\Phi(T) \geq 0$. 
+				Initially, $\Phi(T_0) = (m+1)v(T_0) + \Psi(T_0) = 0$, since
+				there is only one node with weight 1.
+				Since, $v(T) \geq 0$ and $\Psi(T) \geq 0$ for any Rtree $T$, $\Phi(T) \geq 0$.
+
+				\begin{lemma}
+					The total number of operations in sequence $\sigma$ is in $O(k)$.
+				\end{lemma}
+				\begin{proof}
+					Since each application of one rebalancing rule decreases
+					$\Phi$ by 1.
+					Suppose $\Phi(T) = 0$ for some Rtree $T$, then no
+					rebalacing rule could be applied.
+
+					Consider the increment of $\Phi$ performing an insertion on an Rtree.
+					$a$ might increase by 1 and $b$ might increase by 1, $c$
+					can not increase. 
+					Thus, $\Psi$ could change by at most 6. 
+					The number of 0-0 violation could increase by 1, and
+					therefore, the increment of $\Phi$ is at most $(6+1)\times1
+					+ 6 = 13$.
+
+					Next, consider the increment for deletion.
+					$a$ can not increase. $b$ could increase by 1 and $c$ as
+					well. 
+					It follows that $\Psi$ can only increase by at most 3.
+					No 0-0 violations would be caused by deletion. 
+					If $w''$ is 0, then the number of overweight violations
+					won't change.
+					Otherwise, overweight violation increases by $(w+w''-1) -
+					(w-1 + w''-1) = 1$.
+					Hence, $\Phi$ increases by at most $(6+1) \times 1 + 3 =
+					10$.
+
+					Therefore, the increament of $\Phi$ is smaller or equal to
+					13 for an insertion or deletion operation.
+
+					Let $T_{u,v} = T_i$, where $u = 0, 1, \cdots, k$ is the number of insertion
+					and deletion applied, $v \in \mathbb{N}$ is the total number of
+					applications of rebalancing rules and $i = u + v$. 
+
+					Let $P(u,v)$ be the predicate "$\Phi(T_{u,v}) \leq 13u-v$".
+					We want to prove that $\forall u \in \{0, 1, \cdots, k\}.
+					\forall k \in \mathbb{N}. P(u,v)$. Perform double induction
+					to prove this.
+
+					\textbf{Base Case:} $u = 0$
+					\begin{addmargin}[1em]{0em}
+						Base Case: $v = 0$
+						\begin{addmargin}[1em]{0em}
+							Since $\Phi(T_{0, 0}) = \Phi(T_0) = 0$, $P(0,0)$
+							holds.
+						\end{addmargin}
+						
+						Inductive Step:
+						\begin{addmargin}[1em]{0em}
+							Suppose $P(0, v)$ is true for some $v \in
+							\mathbb{N}$.
+							Then $\Phi(T_{0, v}) \leq 13u-v$.
+							By (b), $\Phi(T_{0,v+1}) \leq \Phi(T_{0, v}) - 1
+							\leq 13u-(v+1)$.
+							Thus $P(u, v+1)$ is true.
+						\end{addmargin}
+
+						By induction, $\forall k \in \mathbb{N}. P(0, v)$ is
+						true.
+					\end{addmargin}
+
+					\textbf{Inductive Step:}
+					\begin{addmargin}[1em]{0em}
+						Suppose $\forall vk \in \mathbb{N}. P(u,v)$ is true for
+						some $u \in \{0, 1, \cdots, k-1\}$.
+						Then, for any $v \in \mathbb{N} \Phi(T_{u+1, v+1}) \leq
+						\max\{\Phi(T_{u,v+1})+13, \Phi(T_{u+1,v})-1\}$.
+						Recall that 13 is the upper bound of the increment of
+						$\Phi$ for performing a single insertion or deletion.
+
+						Base Case: $vk = 0$
+						\begin{addmargin}[1em]{0em}
+							Then, $\Phi(T_{u+1,0}) \leq \Phi(T_{u, 0})+13 \leq
+							13(u+1)$.
+							Thus, $P(u+1,0)$ holds.
+						\end{addmargin}
+
+						Inductive Step:
+						\begin{addmargin}[1em]{0em}
+							Suppose $P(u+1, v)$ is true for some $v \in
+							\mathbb{N}$.
+							Then $P(u+1, v) \leq 13(u+1)-v$.
+							$\Phi(T_{u,v+1})+13 \leq 13u-(v+1)+13 =
+							13(u+1)-(v+1)$.
+							$\Phi(T_{u+1,v})-1 \leq 13(u+1)-v-1 =
+							13(u+1)-(v+1)$.
+							Therefore, $\Phi(T_{u+1, v+1}) \leq
+							\max\{\Phi(T_{u,v+1})+13, \Phi(T_{u+1,v})-1\} \leq
+							13(u+1)-(v+1)$.
+							Hence, $P(u+1,v+1)$ is true.
+						\end{addmargin}
+
+						By induction, $\forall k \in \mathbb{N}. P(u+1, v)$ is
+						true.
+
+					\end{addmargin}
+
+					By double induction, $\forall u \in \{0, 1, \cdots, k\}.
+					\forall k \in \mathbb{N}. P(u, v)$.
+
+					Then $P(k, v)$ is true for any $v \in \mathbb{N}$.
+					That is, $\Phi(T_{k,v}) \leq 13k-v$, for all natural number
+					$v$.
+					Since $\Phi \geq 0$, $13k-v \geq 0$, which implies that $v
+					\leq 13k$. 
+					Thus the total number of operations is bounded by $14k$, which
+					is in $O(k)$. 
+				\end{proof}
+
+				Now consider the amartized cost.
+				Consider any $i$th operation in the sequence $\sigma$.
 
 				\textbf{INSERTION}
-				\begin{addmargin}
-					Suppose inserting under node $x$ with weight $w$. 
-					Since the tree is leaf oriented tree, $x$ must be a leaf.
-					Thus, $w \geq 1$ \\.
-					\textit{Case 1:} $w = 1$
-					\begin{addmargin}[1em]{0em}
-						Then, $c(T_i) = c(T_{i-1})$.
-
-						If $a(T_{i-1})$ increses by 1, in which case $b(T_i) = b(T_{i-1})$, and the number of violation maintains its value.
-
-						Otherwise, $a(T_i) = a(T_{i-1})$.
-						If $x$ has no parent, then $b(T_i) = b (T_{i-1})$.
-
-						If $x$ has a parent, then $x$ must have a sibling, say $y$.
-						$y$ has either 0 weight or 1 weight by the properties of an Rtree.
-						Since we assume $a(T_i) = a(T_{i-1})$ in this case, then either the parent of $x$ has 0 weight or $y$ has a weight of 1.
-						%TODO
-					\end{addmargin}
-					\textit{Case 2:} $w \geq 1$
-					\begin{addmargin}[1em]{0em}
-						%TODO
-					\end{addmargin}
+				\begin{addmargin}[1em]{0em}
+					$\Phi(T_i) - \Phi(T_{i-1}) \leq 13$ as shown in the proof
+					of the lemma.
+					$c_i = 4$ for initializing and connecting two new node. 
+					Then $a_i = c_i + \Phi(T_i) - \Phi(T_{i-1}) \leq 17$.
 				\end{addmargin}
-				
+
 				\textbf{DELETION}
-				%TODO
+				\begin{addmargin}[1em]{0em}
+					$\Phi(T_i) - \Phi(T_{i-1}) \leq 10$, also shown in the
+					proof of lemma.
+					$c_i = 4$ for removing 2 nodes, changing weight, and
+					modifying a pointer.
+					Then $a_i = c_i + \Phi(T_i) - \Phi(T_{i-1}) \leq 14$
+				\end{addmargin}
 
 				\textbf{REBALANCING}
-				\begin{addmargin}
-				Let the true cost of a single rotation be $r$.
-				Then a double rotation has a cost of $2r$.
-				Let the change of weight on a node with a true cost of 1.
-				Then, rule 1 has a true cost of 1, rule 2 has a true cost of 3, rule 3(a) has a true cost of $r$, rule 3(b) has a true cost of $2r$, 
-				rule 4 has a true cost of 1, rule 5 has a true cost of 3, rule 6 has a true cost of 3, rule 7(a) has a true cost of $r+3$, 7(b) has a ture cost of $2r=3$,
-				and rule 8 has a true cost of $r+2$.
-				Therefore, the upperbound of the true cost $c_i$ of applying a rebalancing rule  is $2r+3$.
-				By (b), we know that $\Phi(T_i) - \Phi(T_{i-1}) \leq -1$.
-				Then $a_i = c_i + \Phi(T_i) - \Phi(T_{i-1}) \leq 2r+3 + (-1) = 2r+2$
+				\begin{addmargin}[1em]{0em}
+					Let the true cost of a single rotation be some constant $r$.
+					Then a double rotation has a cost of $2r$.
+
+					Rule 1 has a true cost of 1, rule 2 has a true cost
+					of 3, rule 3(a) has a true cost of $r$, rule 3(b) has a
+					true cost of $2r$, 	rule 4 has a true cost of 1, rule 5 has
+					a true cost of 3, rule 6 has a true cost of 3, rule 7(a)
+					has a true cost of $r+3$, 7(b) has a true cost of $2r+3$, 
+					and rule 8 has a true cost of $r+2$.
+
+					Therefore, the upperbound of the true cost $c_i$ of
+					applying a rebalancing rule is $2r+3$. 
+					By (b), we know that $\Phi(T_i) - \Phi(T_{i-1}) \leq -1$.
+					Then $a_i = c_i + \Phi(T_i) - \Phi(T_{i-1}) \leq 2r+3 + (-1) = 2r+2$
 				\end{addmargin}
+
+				Hence, the amartized cost of one operation is bounded by
+				$\max\{17, 14, 2r+2\}$, which is in $O(1)$.
+				Since the total number of operations is in $O(k)$ and the
+				amartized cost of each operation is in $O(1)$, the total cost
+				of $\sigma$ is $O(k)$. 
 		\end{enumerate}
 \end{enumerate}
 
