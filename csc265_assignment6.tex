@@ -52,7 +52,21 @@ The median of a set of numbers is the element with rank $\lfloor (n+1)/2 \rfloor
 	using the decision tree with 2-way comparisons.
 	\end{comment}
 
-	\item
+	\item By 1, we can make the output of the decision tree be the index of the median and the set of indecies of elements greater than the median and the set of indecies for smaller ones. \\
+	Then, the total number of possible output for an array of size $n$ is
+	\begin{align*}
+		& n \cdot 
+		\begin{pmatrix}
+			n-1 \\
+			\lfloor (n+1)/2 \rfloor - 1
+		\end{pmatrix} \\
+		=& \frac{n^{(\lfloor (n+1)/2 \rfloor)}}{\lfloor (n-1)/2 \rfloor!} \\
+		\geq& \frac{n^{(\lfloor n/2 \rfloor)}}{\lfloor n/2 \rfloor!} \\
+		=& \prod_{i=1}^{\lfloor n/2 \rfloor}\frac{n-i+1}{\lfloor n/2 \rfloor -i+1} \\
+		\geq& 2^{\lfloor n/2 \rfloor}
+	\end{align*}
+	Since the information theory lower bound $\log_2(2^{\lfloor n/2 \rfloor}) = \left\lfloor \frac{n}{2} \right\rfloor \in \Omega(n)$, 
+	$\Omega(n)$ is the lower bound of the worst case complexity.
 
 \end{enumerate}
 
