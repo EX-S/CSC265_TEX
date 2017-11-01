@@ -46,6 +46,27 @@ The median of a set of numbers is the element with rank $\lfloor (n+1)/2 \rfloor
 	\end{comment}
 
 	\item
+	Since all elements are distinct, 2-way = comparison returns T iff the indices agree, and there is no point of camparing an element with itself in this problem. 
+	Thus we can assume that there is no 2-way = comparison in this decision tree.
+
+	\begin{lemma}
+	If the median of an array $A$ of size $n > 1$ is $A[k]$, where $k \in \{1, 2, \cdots, n\}$, then $A[k]$ is at least compared once in the decision tree.
+	\end{lemma}
+
+	\begin{proof}
+	Let $C$ be an array of size $n$ such that $C[k] > C[i] = A[i]. \forall i \neq k$.
+	Then, the median of $C$ is not $C[k]$, in which case, the decision tree gives different output for $A$ and $C$.
+	Suppose there is no comparison between the element on index $k$ and any other elements.
+	Then, the decision tree shows the same output for $A$ and $C$ since all other elements of $A$ and $C$ are the same.
+	This is a contradiction.
+
+	Therefore, the lemma is true.
+	\end{proof}
+
+	\begin{lemma}
+	
+	\end{lemma}
+	
 
 	\begin{comment}
 	Prove and $\Omega(n)$ lower bound on the worst case complexity of finding the median of $n$ numbers 
