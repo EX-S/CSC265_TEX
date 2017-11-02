@@ -31,7 +31,7 @@
 \noindent
 Yibin Zhao\\
 1002996261\\
-NO OUTSIDE DISCUSSION\\
+Dicussed with Jiayi Zhang\\
 NO EXTRA MATERIAL CONSULTED\\
 
 \begin{comment}
@@ -46,26 +46,75 @@ The median of a set of numbers is the element with rank $\lfloor (n+1)/2 \rfloor
 	\end{comment}
 
 	\item
-	Since all elements are distinct, 2-way = comparison returns T iff the indices agree, and there is no point of camparing an element with itself in this problem. 
-	Thus we can assume that there is no 2-way = comparison in this decision tree.
+
+	I will prove this propesition by proving the following stronger theorem:
+	
+	\begin{theorem}
+	Any decision tree using 2-way comparison that finds that $k$th largest element in $n$ distinct numbers
+	also determines the set of numbers greater than the $k$th largest element and
+	the set of numbers smaller than the $k$th largest element, where $k$ is any integer from 1 to $n$.
+	\end{theorem}
 
 	\begin{lemma}
-	If the median of an array $A$ of size $n > 1$ is $A[k]$, where $k \in \{1, 2, \cdots, n\}$, then $A[k]$ is at least compared once in the decision tree.
+	For a decision tree, the result of a 2-way = comparison is consistent for any input of size $n$.
 	\end{lemma}
 
 	\begin{proof}
-	Let $C$ be an array of size $n$ such that $C[k] > C[i] = A[i]. \forall i \neq k$.
-	Then, the median of $C$ is not $C[k]$, in which case, the decision tree gives different output for $A$ and $C$.
-	Suppose there is no comparison between the element on index $k$ and any other elements.
-	Then, the decision tree shows the same output for $A$ and $C$ since all other elements of $A$ and $C$ are the same.
-	This is a contradiction.
+	Consider a comparison $A[i] = A[j]$ in the decision tree, where $i, j \in \{1, 2, \cdots, n\}$.
 
-	Therefore, the lemma is true.
+	If $i = j$, then the comparison always return T. 
+	Otherwise, it always returns F regardless of the input, since all numbers are distinct.
 	\end{proof}
 
+	Thus, the result of a $=$ comparison does not impliy anything about the structure of the input.
+
+	Therefore, we can safely assume all comparisons below are 2-way $<, >, \leq, \geq$ comparisons, 
+	unless I explicitly state that it is a $=$ comparison.
+
 	\begin{lemma}
-	
+	If $k > 1$, then there is at least one comparison between the $k$th largest number and the $k-1$ largest number.
 	\end{lemma}
+	
+	\begin{proof}
+	Let A be any array with distinct numbers of size $n$.
+	Since $k>1$, $n\geqk>1$.
+	Let $p, q \in \{1, 2, \ldots, n\}$, such that $A[p]$ has rank $k-1$ and $A[q]$ has rank $k$.
+
+	Consider an arbitrary decision tree with 2-way comparison that gives the index of the $k$th largest
+	number in this array.
+	Assume that there is no comparison between $A[p]$ and $A[q]$ in the path for this input $A$.
+	Then, let $B[i] = A[i]$ for all $i$ not equal to $p$ or $q$, and let $B[p] = A[q]$ and $B[q] = A[p]$.
+
+	Consider a comparison between $B[i]$ and $B[j]$, where $i \neq j$.
+	By the assumption above, $\{i, j\} \neq \{p, q\}$. \\
+	If neither $i, j$ equal to $p$ or $q$, the result is equal to the same comparison between $A[i]$ and $A[j]$. \\
+	If one of $i, j$ is equal to $p$ or $q$. 
+	Without loss of generality, suppose $j$ is not equal to either $p$ or $q$. 
+	Then, if $A[j]$ has a rank smaller than $k-1$, then $A[j] = B[j] < A[p] = B[q]$ and $B[j] < A[q] = B[p]$. 
+	This implies that the comparison between $B[i]$ and $B[j]$ is consistent with the comparison between $A[i]$ and $A[j]$.
+	Otherwise, $A[j]$ has a rank greater than $k$, then $A[j] = B[j] > A[p] = B[q]$ and $B[j] > A[p] = B[q]$. 
+	Thus, its also consistent in this case.
+	Similarly, we can obtain that the result of this comparison is also consistent for $i$ not equal to either $p$ or $q$. \\
+	
+	Thus, the output is consistent for $A$ and $B$.
+	However, the output is not correct for $B$. 
+	This is a contradiction.
+
+	Therefore, there is at least one comparison between $A[p]$ and $A[q]$.
+	By generalization, the lemma is true.
+	\end{proof}
+
+	\begin{corrolary}
+	If $k < n$, then there is at least one comparison between the $k$th largest number and the $k+1$ largest number.
+	\end{corrolary}
+
+	\begin{proof}
+	Use similar approach as the lemma, not stating here.
+	\end{proof}
+
+	
+
+
 	
 
 	\begin{comment}
