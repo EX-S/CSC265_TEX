@@ -112,7 +112,68 @@ The median of a set of numbers is the element with rank $\lfloor (n+1)/2 \rfloor
 	Use similar approach as the lemma, not stating here.
 	\end{proof}
 
+	We can now prove the theorem.
+	\begin{proof}
+	Let $P(n)$ be the predicate that "the theorem is true for size $n$ and all $k$".
+	Want to prove that $\forall n \in \mathbb{Z}^+. P(n)$. 
+
+	\textbf{Base Case:} $n=1$
+	\begin{addmargin}[1em]{0em}
+		Then $k=1$. 
+		The decision tree always return the one and only element in this array.
+		The set smaller than that and the set greater than that element is always empty.
+		Thus, $P(1)$.
+	\end{addmargin}
+
+	\textbf{Inductive Step:}
+	\begin{addmargin}[1em]{0em}
+		Suppose that $P(n)$ is true for some $n \in \mathbb{Z}^+$. 
+		Want to prove that $P(n+1)$ is true.
+
+		If $k = 1$, then it is trivial,
+		since all other numbers except the output are in the set of numbers greater than the output,
+		and the set of numbers smaller than that is alwasy empty.
+
+		If $k = n+1$, then it is also trivial, 
+		since all other numbers except the output are in the set of numbers smaller than the output, 
+		and the set of numbers greater than that is always empty.
+
+		Now consider $1 < k < n+1$, if that case exists.
+		Suppose there is a decision tree $T$ that solve the problem for $n+1$ and $k$.
+
+		Consider an arbitrary array $A$ of size $n+1$ that satisfy $\forall i \in \{1, \cdots, n\}. A[n+1] > A[i]$.
+		Then the $k$th largest element in $A[1 \ldots n+1]$ is also 
+		the $k$th largest element in $A[1 \ldots n]$.
+
+		Define that following procedure on tree $T$:
+		\begin{addmargin}[1em]{0em}
+			If there exists a node that contants a comparison between $A[n+1]$ and $A[i]$, 
+			where $i \in \{1, \cdots, n\}$.
+
+			If this comparison returns T, then replace this node by its T child and delete the F subtree. \\
+			Otherwise, replace this node by its F child and delete the T subtree.
+
+			Repeat above steps until there is no such node in this tree.
+		\end{addmargin}
+
+		Let $T'$ be the new tree after this procedure.
+		Notice that $T'$ does not depend on the actual input array $A$.
+		It only depends on $T$ and the assumption of $A$, on which $A[n+1]$ is the largest element.
+
+		Thus, the result of $T'$ on input $A[1 \ldots n]$ is consistent with the result of $T$ on input $A[1 \ldots n+1]$.
+		Since for any arbitrary $B[1 \ldots n]$, we can always append a number that is greater than 
+		all elements in $B$, we can claim that $A[1 \cdots n]$ is an arbitrary array on size $n$. 
+		Therefore, $T'$ is a decision tree that solves the problem with $n$ and $k$.
+
+		By the inductive assumption, $T'$ can determine the set of numbers smaller than the $k$th largest number
+		and the set of numbers greater than the $k$th largest number for problem of size $n$.
+		
+
+
+
+	\end{addmargin}
 	
+	\end{proof}
 
 
 	
