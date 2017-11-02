@@ -50,22 +50,34 @@ The median of a set of numbers is the element with rank $\lfloor (n+1)/2 \rfloor
 	Thus we can assume that there is no 2-way = comparison in this decision tree.
 
 	\begin{lemma}
-	If the median of an array $A$ of size $n > 1$ is $A[k]$, where $k \in \{1, 2, \cdots, n\}$, then $A[k]$ is at least compared once in the decision tree.
+	For any input of size $n$, any number is compared by some other number by at least once in its path
+	of a decision tree that solve this problem.
 	\end{lemma}
 
 	\begin{proof}
-	Let $C$ be an array of size $n$ such that $C[k] > C[i] = A[i]. \forall i \neq k$.
-	Then, the median of $C$ is not $C[k]$, in which case, the decision tree gives different output for $A$ and $C$.
-	Suppose there is no comparison between the element on index $k$ and any other elements.
-	Then, the decision tree shows the same output for $A$ and $C$ since all other elements of $A$ and $C$ are the same.
-	This is a contradiction.
+	Consider an array $A$ of size $n$. 
+	Suppose there exists such an element $A[j]$ not being compared by any other elements.
+	Let $A[k]$ be the number with rank $\lfloor (n+1)/2 \rfloor$.
+	Then, the decision tree gives an output of $A[k]$ for this input $A$. 
 
+	Let $B[i] = A[i]$ for all $i \neq j$. \\
+	If $A[j] > A[k]$, then set $B[j] = A[k]-1$. 
+	Otherwise, set $B[j] = A[k]+1$. \\
+	This guarantee that the median of $B$ is not $B[k]$.
+	
+	Consider any comparison in the path of the decision tree for input $A$.
+	Denote the two numbers being compared as $A[p]$ and $A[q]$, where $p \neq q$. \\
+	By the assumption, neither $p, q$ could be $j$. 
+ 	Then the same comparison between $B[p]$ and $B[q]$ should have the same result. \\
+	Thus, the output is consistent for $A$ and $B$.
+	
+	However, the output for $B$ is not correct. 
+	This is a contradiction.
+	
 	Therefore, the lemma is true.
 	\end{proof}
 
-	\begin{lemma}
-	
-	\end{lemma}
+
 	
 
 	\begin{comment}
