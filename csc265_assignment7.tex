@@ -45,15 +45,58 @@ NO EXTRA MATERIAL CONSULTED\\
 
 	\begin{comment}
 	Prove that, if n MAKE-SET operations and any number of LINK and FIND-SET operations have 
-	been performed, then any node has at most $\log_2(n)$ ancestor v, such that $w(parent(v)) \geq 2w(v)$.
+	been performed, then any node has at most $\log_2(n)$ ancestor v, 
+	such that $w(parent(v)) \geq 2w(v)$.
 	\end{comment}
 	\item
+		Suppose after a sequence of those operations, there exists a node $x$
+		such that $x$ has more than $\log_2(n)$ ancestors which satisfy
+		$w(\text{parent}(v)) \geq 2w(v)$. 
+		Let $a_1, a_2, \cdots, a_p$ be the sequence of all such ancestors of
+		$x$ ordered from the lowest to the lowest. 
+		$p > \log_2(n)$.
+		Let $x = a_0$. 
+
+		\textit{Claim:} $\forall i \in \{0, 1, \cdots , p\}. w(a_i) \geq 2^i$
+		\begin{proof}
+			Let $P(i)$ be the predicate "$w(a_i) \geq 2^i$". 
+			We want to prove $\forall i \in \{0, 1, \cdots, p\}. P(i)$.
+			
+			\textbf{Base Case:} $i = 0$
+			\begin{addmargin}[1em]{0em}
+				The subtree rooted at $x$ has at least a node $x$, which means that
+				$w(x) = w(a_0) \geq 1 = 2^0$.
+
+				Thus $P(0)$ is true.
+			\end{addmargin}
+
+			\textbf{Inductive Step:}
+			\begin{addmargin}[1em]{0em}
+				Let $P(i)$ be true for some $i \in \{0, 1, \cdots, p-1\}$.
+				Then, $w(a_i) \geq 2^i$.
+				Since $a_{i+1}$ is an ancestor of $a_i$, $w(a_{i+1}) \geq
+				w(\text{parent}(a_i)) \geq 2w(a_i) \geq 2^{i+1}$.
+
+				Therefore, $P(i+1)$ is true.
+			\end{addmargin}
+
+			By induction, the claim is true. 
+		\end{proof}
+
+		By the claim $w(a_p) \geq 2^{p} > 2^{\log_2 (n)} = n$.
+		This is a contradiction, since there could be at most $n$ nodes in a
+		tree.
+
+		Hence, the proposition  holds.
+
 
 	\begin{comment}
-	Using the accounting method, prove that the amartized complexity of MAKE-SET is $O(1)$ and the amartized
-	complexity of LINK and FIND-SET are $O(\log(n))$, where $n$ is the number of MAKE-SET operations performed.
+	Using the accounting method, prove that the amartized complexity of MAKE-SET is $O(1)$ 
+	and the amartized complexity of LINK and FIND-SET are $O(\log(n))$, 
+	where $n$ is the number of MAKE-SET operations performed.
 
-	Consider the following credit invariant: Each node $x$ has $\log_2(w(x))$ credits associated with it. 
+	Consider the following credit invariant: 
+		Each node $x$ has $\log_2(w(x))$ credits associated with it. 
 	\end{comment}
 	\item
 
