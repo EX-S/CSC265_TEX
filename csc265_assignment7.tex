@@ -99,6 +99,125 @@ NO EXTRA MATERIAL CONSULTED\\
 		Each node $x$ has $\log_2(w(x))$ credits associated with it. 
 	\end{comment}
 	\item
+		Since there are only $n$ MAKE-SET operations, the number of LINK
+		operation is at most $n-1$.
+		Let the number of pointer assignments be the cost of these algorithms. 
+		
+		The actual cost of each operation is 
+		\begin{align*}
+			&\text{MAKE-SET}	&&  1 \\
+			&\text{LINK}		&&  1 \\
+			&\text{FIND-SET}	&&  h(x)+1
+		\end{align*}
+		For operation FIND-SET, $h(x)$ is the height of the node $x$ to be
+		performed on.
+		Since the operation recusively find the root and assign the pointer to
+		the root back to those nodes, $h(x)$ operations are needed.
+		Notice that the root is of height 0, 1 extra operation is needed for the
+		root.
+		Thus, FIND-SET has an actual cost of $h(x)+1$.
+
+		Consider the credit invariant: Each node $x$ has $\log_2w(x)$ credits
+		associated with it.
+
+		We start with a disjoint set with no elements in it.
+		Since there is no nodes in the disjoint set initially, the credit
+		invariant is trivial.
+
+
+		Now suppose credit invariant holds before some operation.
+
+		For a MAKE-SET operation, charge $\$1$ for the actual cost.
+		All other sets except the new set are unchanged.
+		Since there is only one element in the new set, $\log_2w(x) = \log_21 =
+		0$, and thus, no new credits.
+		Therefore, the total charge of a MAKE-SET operation is $\$1$, which is
+		in $O(1)$.
+		Also, the credit invariant holds for a MAKE-SET operation.
+
+
+		Consider a LINK operation LINK($x, y$).
+		$\$1$ is charged to pay for the actual cost of this operation.
+		Since $x$ and $y$ are the representatives for their sets, $w(x)$ and
+		$w(y)$ are the number of nodes of those sets respectively. 
+		By the implementation of LINK, only the credits on node $x$ needs to be
+		changed in order to maintain the credit invarant.
+		The new set consists of $w(x)+w(y)$ elements, which implies that the
+		new credit on $x$ is $\log_2(w(x)+w(y))$.
+		Then, extra $\$\log_2(w(x)+w(y)) - \log_2w(x) = \$\log_2(1+w(y)/w(x))$
+		needs to be charged in order to maintain the credit invariant. 
+
+		Suppose LINK has been performed $i$ times, where $i \in \{0, 1, \cdots
+		n-2\}$, then the largest set is of order $i+1$.
+		Then, consider a new LINK operation.
+		$\log_2(1+w(y)/w(x)) \leq \log_2(1+(i+1)/1) = \log_2(i+2)$.
+		Therefore the amartized cost of a LINK operation is at most
+		$$\$\log_2(n-2+2)+1 = \log_2n+1 \in O(\log n)$$
+
+
+		Now, consider a FIND-SET operation.
+		Suppose this FIND-SET operation is performed on a node $x$.
+		Then, $\$h(x)+1$ is charged for this operation.
+		Notice that the set where $w$ belongs has at most $n$ nodes.
+		Then, by 1. there are at most $\log_2n$ ancestors $v$ of $x$ such that
+		$w(\text{parent}(v)) \geq 2w(v)$.
+		This implies that there are at least $h(x)-1 - \log_2n$ ancestors $v$
+		of $x$ such that $w(\text{parent}(v)) < 2w(v)$ (Note that the root
+		cannot be such an ancestor).
+		Let $x_0, x_1, \cdots, x_{h(x)}$ be the sequence of nodes from the root
+		to $x$.
+		To keep the credit invariant, $\$\log_2w(x_i) - \log_2(w(x_i) -
+		w(x_{i+1}))$ needs to be withdrawn from node $x_i$, where $i \in \{1,
+		2, \cdots, h(x)-1\}$. 
+		Note that the credit on $x_{h(x)} = x$ need not be changed, since the
+		subtree rooted at $x$ is unchanged.
+		For any nodes other than $x_0, x_1, \cdots, x_{h(x)}$, the subtrees
+		rooted at them are also unchanged, and thus the credit invarient holds
+		for them.
+
+		Consider the total number of credit withdrawn from the bank:
+		\begin{align*}
+			& \sum_{i=1}^{h(x)-1}(\log_2w(x_i) - \log_2(w(x_i) - w(x_{i+1}))) \\
+			=& \sum_{i=1}^{h(x)-1} \left(- \log_2(1 -
+			\frac{w(x_{i+1})}{w(x_i)}) \right) \\
+		\end{align*}
+		Consider each $- \log_2(1 - \frac{w(x_{i+1})}{w(x_i)})$. \\
+		\textit{Case 1:} $w(x_{i}) \geq 2w(x_{i+1})$
+		\begin{addmargin}[1em]{0em}
+			Then, $0 < \frac{w(x_{i+1})}{w(x_i)} \leq \frac{1}{2}$.
+			This implies that $0< -\log_2(1-\frac{w(x_{i+1})}{w(x_i)}) \leq 1$.
+		\end{addmargin}
+		\textit{Case 2:} $w(x_{i}) < 2w(x_{i+1})$
+		\begin{addmargin}[1em]{0em}
+			Then, $frac{w(x_{i+1})}{w(x_i)} > \frac{1}{2}$, and thus, $-
+			\log_2(1 - \frac{w(x_{i+1})}{w(x_i)}) > 1$
+		\end{addmargin}
+		Since there are at most $\log_2n$ of case 1 and at least
+		$h(x)-1-\log_2n$ of case 2, the total number of credit withdrawn from
+		the bank is at least
+		\begin{align*}
+			& \sum_{i=1}^{h(x)-1} \left(- \log_2(1 - \frac{w(x_{i+1})}{w(x_i)})
+			\right) \\
+			>& \log_2n \cdot 0 + (h(x) - 1 - \log_2n) \cdot 1 \\
+			=& h(x) - 1 - \log_2n && (h(x) > \log_2n)
+		\end{align*}
+		When, $\log_2n \geq h(x)$, the total credit is at least 0.
+
+		Then, the amartized cost is at most $\$(h(x)+1) - (h(x)-1-\log_2n) =
+		\$\log_2n + 2$ when $h(x) > \log_2n$, and $\$(h(x)+1)-0 = \$h(x)+1$
+		when $h(x) \leq \log_2n$.
+		Either case, the amartized cost is always in $O(\log n)$.
+		
+		Also, the credit invariant is true for all nodes after FIND-SET
+		operation. 
+
+		
+		Therefore, the credit invariant also holds after a operation.
+
+		By induction, the credit invariant is true.
+		Also, the armartized time complexity of MAKE-SET, LINK and FIND-SET are
+		$O(1)$, $O(\log n)$ and $O(\log n)$ respectively for this sequence of
+		operations.
 
 	\begin{comment}
 	Using the potential method, prove that the amartized complexity of MAKE-SET is $O(1)$
