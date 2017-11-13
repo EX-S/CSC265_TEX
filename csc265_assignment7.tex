@@ -146,13 +146,10 @@ NO EXTRA MATERIAL CONSULTED\\
 		new credit on $x$ is $\log_2(w(x)+w(y))$.
 		Then, extra $\$\log_2(w(x)+w(y)) - \log_2w(x) = \$\log_2(1+w(y)/w(x))$
 		needs to be charged in order to maintain the credit invariant. 
-
-		Suppose LINK has been performed $i$ times, where $i \in \{0, 1, \cdots
-		n-2\}$, then the largest set is of order $i+1$.
-		Then, consider a new LINK operation.
-		$\log_2(1+w(y)/w(x)) \leq \log_2(1+(i+1)/1) = \log_2(i+2)$.
+		$w(y)$ is at most $n-1$, or otherwise LINK cannot be performed.
+		Also, $w(x)$ is at least 1.
 		Therefore the amartized cost of a LINK operation is at most
-		$$\$\log_2(n-2+2)+1 = \log_2n+1 \in O(\log n)$$
+		$$\$\log_2(1+(n-1)/1)+1 = \log_2n+1 \in O(\log n)$$
 
 
 		Now, consider a FIND-SET operation.
@@ -225,6 +222,65 @@ NO EXTRA MATERIAL CONSULTED\\
 	MAKE-SET operations that have been performed.
 	\end{comment}
 	\item
+		Let $S$ represent a disjoint set data structure. 
+		Let $s_1, s_2, \cdots, s_m$ be all the disjoint sets in $S$.
+		Let $\Phi(S)$ be the potential function defined by 
+		$$\Phi(S) = \sum_{i=1}^{m}\sum_{x \in s_i} \log_2w(x)$$
+		Let $S_i$ be the disjoint set after the $i$th operation in the sequence
+		of operations. 
+		$S_0$ is the initial disjoint set with no nodes in it.
+		Then, by the definition of $\Phi$, $\Phi(S_0)$ is trivial.
+		Also, $\Phi(S_n) \geq 0$, since as long as $x$ exists, $\log_2w(x) \geq
+		0$.
+		Thus, the total amartized cost is always greater or equal to the total
+		actual cost.
+
+		The actual cost of each operation is stated in 2.
+
+
+		Suppose we perform the $(i+1)$th operation in this sequence of
+		operation, where $i \in \mathbb{N}$.
+
+
+		Consider a MAKE-SET operation, with input $x$.
+		The actual cost of MAKE-SET is 1.
+		$\Phi(S_{i+1}) - \Phi(S_i) = \log_2w(x) = 0$.
+		Thus, the amartized cost is $1 + 0 = 1$, which is in $O(1)$.
+
+
+		Consider a LINK operation, with input $x$ and $y$.
+		The actual cost of this operation is $1$.
+		Since $x$ and $y$ are representatives of their set, $w(x)$ and $w(y)$
+		are the size of their sets respectively. 
+		The new set after LINK operation has a size of $w(x)+w(y)$.
+		Notice that all subtrees rooted at any node other than $x$ are
+		unchanged after this operation. 
+		Then, $\Phi(S_{i+1}) - \Phi(S_i) = \log_2(w(x)+w(y)) - \log_2w(x)
+		= \log_2(1+\frac{w(y)}{w(x)})$.
+		We have already proven in 2. that $\log_2(1+\frac{w(y)}{w(x)}) + 1 \leq
+		\log_2n + 1$.
+		Therefore, the amartized cost of each LINK operation is at most
+		$\log_2n+1$ which is in $O(\log n)$.
+
+
+		Now, consider a FIND-SET operation on input $x$.
+		The actual cost of this operation is $h(x) + 1$.
+		Let $x_0, x_1, \cdots, x_{h(x)}$ be the sequence of nodes from the root
+		to $x$.
+		Since the number of nodes in this set is unchanged by a FIND-SET
+		operation, $w(x_0)$ is unchanged.
+		Also, the subtree rooted at $x = x_{h(x)}$ is unchanged by the
+		implementation of FIND-SET, and thus, $w(x_{h(x)})$ keeps its value.
+		Besides, all subtrees rooted at nodes other than $x_0, x_1, \cdots,
+		x_{h(x)}$ are also unchanged.
+		For node $x_i$, where $i \in \{1, 2, \cdots, h(x)-1\}$, the number of
+		nodes in the new subtree rooted at it is $w(x_i) - w(x_{i+1})$
+		Then, $\Phi(S_{i+1}) - \Phi(S_i) = \sum_{i=1}^{h(x)-1}(\log_2(w(x_i)
+		- w(x_{i+1})) - \log_2w(x_i))$, and the amartized cost of this
+		operation is 
+		$$h(x)+1 - \sum_{i=1}^{h(x)-1}(\log_2w(x_i) - \log_2(w(x_i) - w(x_{i+1})))$$
+		By 2. the amartized cost above is in $O(\log n)$.
+
 
 \end{enumerate}
 
