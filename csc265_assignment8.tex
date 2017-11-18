@@ -34,17 +34,83 @@ Yibin Zhao\\
 NO OUTSIDE DISCUSSION\\
 NO EXTRA MATERIAL CONSULTED\\
 
+\begin{comment}
+A black&white heap is a singly-linked list of binomial trees that satisfies the
+following properties:
+	The roots of the binomial trees in the list have strictly increasing
+	degrees.
+	The root of every binomial tree is white.
+	If a white node is not the root of a binomial tree, its priority is greater
+	than or equal to the priority of its parent.
+	The black nodes all have different degrees.
+	The degree od a black node is 1 less than the degree of its parent, i.e.
+	the black node is the first child of its parent.
+
+Recal that a node in a binomial heap has degree k if and only if the subtree
+rooted at that node is a binomial tree with $2^k$ nodes.
+
+We say that a linked-list of binomial trees is a k-black&while heap if it
+satisfies all the properties of a black&white heap except that it has at
+most two black nodes of degree k and at most one of its black nodes of degree k
+has a parent of degree greater than $k+1$.
+Thus for every natural number k, every black&white heap is a k-black&white
+heap.
+\end{comment}
+
 \begin{enumerate}
+	\item
+	\begin{comment}
+		Suppose you have a linked-list H of binomial trees that satisfies all
+		the properties of a black&white heap except that it has two black nodes
+		$b$ and $b'$ of degree k both of which have parents of degree $k+1$.
+		Given pointers to $b$ and $b'$, explain how to transform H in constant
+		time into a k'-black&white heap with the same set of nodes, for some
+		$k' > k$.
+	\end{comment}
 
-\item
+	\item
+	\begin{comment}
+		Suppose you have a linked-list H of binomial trees that satisfies all
+		the properties of a black&white heap except that it has one black node
+		$b$ of degree $k$ and its parent has degree greater than $k+1$.
+		Suppose that the sibling $s$ of degree $k+1$ of $b$ is white.
+		Given pointers to $b$ and $s$, explain how to transform H in constant
+		time into a k'-black&white heap with the same set of nodes, for some
+		$k' > k$.
+	\end{comment}
 
-\item
+	\item
+	\begin{comment}
+		Suppose you have a linked-list H of binomial trees that satisfies all
+		the properties of a black&white heap except that it has one black node
+		b od degree k and its parent has degree greater than $k+1$.
+		Suppose that the sibling $s$ of degree $k+1$ of $b$ is black.
+		Given pointers to $b$ and $s$, explain how to transform H in constant
+		time into a k'-black&white heap with the some set of nodes, for some
+		$k' > k$.
+	\end{comment}
 
-\item
+	\item
+	\begin{comment}
+		Suppose you have a linked-list H of binomial trees that satisfies all
+		the properties of a black&white heap except that it had one black node
+		$b$ of degree $k$ whose parent has degree greater than $k+1$ and
+		another black node of degree $k$ whose parent has degree $k+1$.
+		Given pointers to $b$ and its sibling $s$ of degree $k+1$, explain how
+		to transform H in constant time into a k'-black&white heap with the
+		same set of nodes, for some $k' > k$.
+	\end{comment}
 
-\item
-
-\item
+	\item
+	\begin{comment}
+		The operation DECREASE-KEY(H, x, v) takes a node $x$ in a black&white
+		heap H and a value $v$ and decrease the priority of $x$ by $v$. 
+		Explain how to perform DECREASE-KEY(H, x, v) in a black&white heap so
+		that its amortized cost in $O(1)$.
+		Use the number of black nodes in the black&white heap as your potential
+		function or, equivalently, maintain the invariant that there is one
+		token on each black node.
+	\end{comment}
 
 \end{enumerate}
 
