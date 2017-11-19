@@ -8,6 +8,8 @@
 \usepackage{listings}
 \usepackage{enumitem}
 \usepackage{scrextend}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 
 \newcommand{\iimplies}{\mbox{ IMPLIES }}
 \newcommand{\oor}{\mbox{ OR }}
@@ -35,7 +37,7 @@ NO OUTSIDE DISCUSSION\\
 NO EXTRA MATERIAL CONSULTED\\
 
 \begin{comment}
-A black&white heap is a singly-linked list of binomial trees that satisfies the
+A black$&$white heap is a singly-linked list of binomial trees that satisfies the
 following properties:
 	The roots of the binomial trees in the list have strictly increasing
 	degrees.
@@ -49,11 +51,11 @@ following properties:
 Recal that a node in a binomial heap has degree k if and only if the subtree
 rooted at that node is a binomial tree with $2^k$ nodes.
 
-We say that a linked-list of binomial trees is a k-black&while heap if it
-satisfies all the properties of a black&white heap except that it has at
+We say that a linked-list of binomial trees is a k-black$&$while heap if it
+satisfies all the properties of a black$&$white heap except that it has at
 most two black nodes of degree k and at most one of its black nodes of degree k
 has a parent of degree greater than $k+1$.
-Thus for every natural number k, every black&white heap is a k-black&white
+Thus for every natural number k, every black$&$white heap is a k-black$&$white
 heap.
 \end{comment}
 
@@ -61,53 +63,217 @@ heap.
 	\item
 	\begin{comment}
 		Suppose you have a linked-list H of binomial trees that satisfies all
-		the properties of a black&white heap except that it has two black nodes
+		the properties of a black$&$white heap except that it has two black nodes
 		$b$ and $b'$ of degree k both of which have parents of degree $k+1$.
 		Given pointers to $b$ and $b'$, explain how to transform H in constant
-		time into a k'-black&white heap with the same set of nodes, for some
+		time into a k'-black$&$white heap with the same set of nodes, for some
 		$k' > k$.
 	\end{comment}
+		
+		\begin{algorithmic}[1]
+			\If{priority(parent($b$)) $\leq$ priority($b$)}
+				\State colour $b$ white
+			\ElsIf{priority(parent($b'$)) $\leq$ priority($b'$)}
+				\State colour $b'$ white
+			\Else
+				\State swap $b$ and parent($b$)
+				\If(parent($b$) is a root)
+					\State colour parent($b$) white
+				\EndIf
+			\EndIf
+		\end{algorithmic}
+
+		By "swap" I mean swapping the value,priority as well as colour of the
+		two nodes. 
+		This could be done in constant time.
+
+		Notice that $b$ and $b'$ cannot share the same parent, or the
+		subtree rooted at their parent would not be a binomial tree.
+
+		If the priority of the parent of $b$ is less than the priority of $b$
+		itself, then we can safely colour $b$ white and still satisfy the
+		third property. 
+		Same thing could be done for $b'$.
+		Then, after this operation, the number of black node of degree $k$ is
+		1, and thus the binomial heap is transformed into a $k+1$-black$\&$white
+		heap.
+
+		Consider both $b$ and $b'$ has priorities less than their parents'
+		respectively.
+		Here I choose to swap $b$ with its parent.
+		After this operation, the node $b$ now stores the values of parent($b$)
+		and parent($b$) stores informations of $b$.
+		If parent($b$) is a root, in order to maintain the second property, $b$
+		should be coloured white. 
+		Note that, now, all children of parent($b$) is white and their priority
+		are	greater than or equal to the priority of the initial parent of $b$, 
+		which is also greater than the now priority(parent($b$)). 
+		Thus, we can safely colour it white.
+		By the condition, there is at most 1 black node with degree $k+1$
+		initially.
+		After the operation, there are at most 2 black nodes with degree $k+1$
+		and 1 black node with degree $k$.
+		Therefore the binomial heap is transformed into a $k+1$-black$\&$white
+		heap.
+
+		Hence, we can always transform such a $k$-black$\&$white heap $H$ into a
+		$k+1$-black$\&$white heap.
+
+		Each line in this algorithm could be done in constant time and there is
+		no loop in this algotithm.
+		Thus, the whole algorithm could be done in constant time.
+
+		Therefore, the claim in this question is true.
 
 	\item
 	\begin{comment}
 		Suppose you have a linked-list H of binomial trees that satisfies all
-		the properties of a black&white heap except that it has one black node
+		the properties of a black$&$white heap except that it has one black node
 		$b$ of degree $k$ and its parent has degree greater than $k+1$.
 		Suppose that the sibling $s$ of degree $k+1$ of $b$ is white.
 		Given pointers to $b$ and $s$, explain how to transform H in constant
-		time into a k'-black&white heap with the same set of nodes, for some
+		time into a k'-black$&$white heap with the same set of nodes, for some
 		$k' > k$.
 	\end{comment}
+
+		\begin{algorithmic}[1]
+			\If{priority(parent($b$)) $\leq$ priority($b$)}
+				\State colour $b$ white
+			\Else
+				\State swap $b$.nextsibling and $s$.firstchild.nextsibling
+				\State swap $b$.parent and $s$.firstchild.parent
+				\State swap $s$.nextsibling and $s$.firstchild
+			\EndIf
+		\end{algorithmic}
+
+		The swaps here are different from the swap in 1.
+		They only swap between two pointers.
+
+		If the priority of the parent of $b$ is less than or equal to the
+		priority of $b$, then $b$ could be coloured white without violating the
+		third property.
+		Then, the number of black nodes of degree $k$ has a parent of degree
+		greater than $k+1$ is 0.
+		Since all other black nodes are unchanged, the new heap is a
+		$k+1$-black$\&$white heap.
+
+		Otherwise, we can infer the inequlity: priority($b$) <
+		priority(parent($b$)) $\leq$ priority($s$) $\leq$
+		priority($s$.firstchild).
+		Thus, the priorities of all white children of $s$ are greater than the
+		priority of $b$.
+		$k+1$ is at least 1, which means that $s$ always has some child.
+		The first child of $s$ is of degree $k$, which means that it could not
+		be black, or it violates the given condition. 
+		Then, we can swap the subtree rooted at $b$ and the subtree rooted at
+		the first child of $s$ and still keep the whole tree a binomial tree. 
+		This is done by the three swap operations on pointers. 
+		Notice that initially the next sibling of $s$ is just $b$.
+		Then the three swap operations are correct.
+		Note that the colour of $b$ could not be changed due to the inequality
+		above.
+		Also, the colour of the initial $s$.firstchild need not be changed.
+		Now, there is still only one black node of order $k$, which is $b$,
+		while, the parent of $b$ now has a degree of $k+1$.
+		Therefore, the new heap is a $k+1$-black$\&$white heap.
+
+		Hence, by the two cases above, we can always transform such a
+		$k$-black$\&$white heap $H$ into a $k+1$-black$\&$white heap.
+
+		Each operation could be done in constant time and there is no loop in
+		this algorithm.
+		Hence, it runs in constant time.
+
+		Therefore, the claim in this question is true.
 
 	\item
 	\begin{comment}
 		Suppose you have a linked-list H of binomial trees that satisfies all
-		the properties of a black&white heap except that it has one black node
+		the properties of a black$&$white heap except that it has one black node
 		b od degree k and its parent has degree greater than $k+1$.
 		Suppose that the sibling $s$ of degree $k+1$ of $b$ is black.
 		Given pointers to $b$ and $s$, explain how to transform H in constant
-		time into a k'-black&white heap with the some set of nodes, for some
+		time into a k'-black$&$white heap with the some set of nodes, for some
 		$k' > k$.
 	\end{comment}
+
+		\begin{algorithmic}[1]
+			\If{priority(parent($b$)) $\leq$ priority($b$)}
+				\State colour $b$ white
+			\ElsIf{priority(parent($b$)) $\leq$ priority($s$)}
+				\State colour $s$ white
+				\State perform algorithm in 2.
+			\Else
+				\State swap $b$ and parent($b$)
+				\If(parent($b$) is a root)
+					\State colour parent($b$) white
+				\EndIf
+			\EndIf
+		\end{algorithmic}
+
+		The swap operation here is the same as the one in 1.
+
+		If the priority of the parent of $b$ is less than or equal to the
+		priority of $b$, then we can make $b$ white and it satisfies the third
+		property.
+		After this operation, there is no node of degree $k$ with a parent of
+		degree greater than $k+1$.
+		Thus, given the condition in this question, the new heap is a
+		$k+1$-black$\&$white heap. 
+
+		Suppose the priority of the parent of $b$ is less than or equal to the
+		priority of $s$.
+		Notice the the parent of $b$ is also the parent of $s$.
+		Then, Similar as the above case, we can make $s$ a white node. 
+		Now, the heap satisfies the condition in question 2, and thus, we can
+		perform the algorithm in 2, which gives us a $k+1$-black$\&$white heap.
+
+		Otherwise, both $s$ and $b$ have priorities less than their parent.
+		Since each white child of the parent has a priority greater than it,
+		the priority of $b$ is less than any of its white siblings.
+		Therefore, we can swap $b$ and its parent and still maintain the third
+		property.
+		By the implementation of swap stated in 1, the pointer to $b$ is still
+		pointing to the same relative location in the heap.
+		Notice that parent($b$) has a degree greater than $k+1$, and any
+		possible new black node in the tree is of degree greater than $k+1$.
+		Now, $b$ is a white node and parent($b$) is black. 
+		Suppose parent($b$) is a root, then it needs to be coloured white in
+		order to maintain property 2.
+		After all these operations, there is no black node of degree $k$ with a
+		parent of degree greater than $k+1$. 
+		Hence, the new heap is a $k+1$-black$\&$white heap.
+		(Note that $s$ might have a parent of degree $k+2$, this does not
+		violate the fact that the new heap is a $k+1$-black$\&$white heap)
+
+		By these three cases above, the $k$-black$\&$white heap H could be
+		transformed into a $k+1$-black$\&$white heap.
+
+		Since each operation in this algorithm runs in constant time and each
+		line is executed by at most once, the algorithm runs in constant time.
+
+		Thus, the claim in the question is true.
 
 	\item
 	\begin{comment}
 		Suppose you have a linked-list H of binomial trees that satisfies all
-		the properties of a black&white heap except that it had one black node
+		the properties of a black$&$white heap except that it had one black node
 		$b$ of degree $k$ whose parent has degree greater than $k+1$ and
 		another black node of degree $k$ whose parent has degree $k+1$.
 		Given pointers to $b$ and its sibling $s$ of degree $k+1$, explain how
-		to transform H in constant time into a k'-black&white heap with the
+		to transform H in constant time into a k'-black$&$white heap with the
 		same set of nodes, for some $k' > k$.
 	\end{comment}
 
+	
+
 	\item
 	\begin{comment}
-		The operation DECREASE-KEY(H, x, v) takes a node $x$ in a black&white
+		The operation DECREASE-KEY(H, x, v) takes a node $x$ in a black$&$white
 		heap H and a value $v$ and decrease the priority of $x$ by $v$. 
-		Explain how to perform DECREASE-KEY(H, x, v) in a black&white heap so
+		Explain how to perform DECREASE-KEY(H, x, v) in a black$&$white heap so
 		that its amortized cost in $O(1)$.
-		Use the number of black nodes in the black&white heap as your potential
+		Use the number of black nodes in the black$&$white heap as your potential
 		function or, equivalently, maintain the invariant that there is one
 		token on each black node.
 	\end{comment}
