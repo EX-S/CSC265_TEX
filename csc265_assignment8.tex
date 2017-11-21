@@ -123,8 +123,6 @@ heap.
 		no loop in this algotithm.
 		Thus, the whole algorithm could be done in constant time.
 
-		Therefore, the claim in this question is true.
-
 	\item
 	\begin{comment}
 		Suppose you have a linked-list H of binomial trees that satisfies all
@@ -183,8 +181,6 @@ heap.
 		Each operation could be done in constant time and there is no loop in
 		this algorithm.
 		Hence, it runs in constant time.
-
-		Therefore, the claim in this question is true.
 
 	\item
 	\begin{comment}
@@ -252,8 +248,6 @@ heap.
 		Since each operation in this algorithm runs in constant time and each
 		line is executed by at most once, the algorithm runs in constant time.
 
-		Thus, the claim in the question is true.
-
 	\item
 	\begin{comment}
 		Suppose you have a linked-list H of binomial trees that satisfies all
@@ -264,8 +258,79 @@ heap.
 		to transform H in constant time into a k'-black$&$white heap with the
 		same set of nodes, for some $k' > k$.
 	\end{comment}
+		
+		\begin{algorithmic}[1]
+			\If{priority(parent($b$)) $\leq$ priority($b$)}
+				\State colour $b$ white
+			\ElsIf{$s$.firstchild is white}
+				\If{$s$ is white}
+					\State perform algorithm in part 2.
+				\Else
+					\State perform algorithm in part 3.
+				\EndIf
+			\Else
+				\State perform algorithm in part 1. where $b = b$ and $b'
+					= s$.firstchild
+				\If{$b$ is black}
+					\If{$s$ is white}
+						\State perform algorithm in part 2.
+					\Else
+						\State perform algorithm in part 3.
+					\EndIf
+				\EndIf
+			\EndIf
+		\end{algorithmic}
 
-	
+		Suppose the priority of the parent of $b$ is less than or equal to
+		priority of $b$, then $b$ could be coloured white and still holds the
+		third property.
+		After colouring, there would be only 1 black node of degree $k$, and
+		no black node of degree $k$ with a parent of degree greater than $k+1$.
+		The new heap is a $k+1$-black&white heap.
+
+		Otherwise, first consider the case where the first child of $s$ is
+		white. 
+		Then, the algorithms in part 2 and part 3 could be performed here. 
+		If $s$ is white, condition on $s$ in part 2 is met, and therefore,
+		perform algorithm in part 2.
+		Otherwise, perform algorithm in part 3.
+		Either case, the resulting heap still has 1 node of degree $k$, while
+		there is no node of degree $k$ with a parent of degree greater than
+		$k+1$.
+		The resulting heap will be a $k+1$-black&white heap.
+
+		Now, consider when the first child of $s$ is black.
+		Algorithm in part 2 and 3 could not be directly performed here.
+		However, algorithm in part 1 could be performed as long as there are
+		two nodes of the same degree. 
+		Let the input for $b$ be $b$ and $b'$ be $s$.firstchild.
+
+		There could be two possible outcomes: \\
+		a. $s$.firschild is coloured white. \\
+		b. $b$ is swapped with its parent. 
+
+		Note that priority($b$) < priority(parent($b$)).
+
+		Suppose a is the case, then there is only one node of degree $k$.
+		But, $b$ is still a black node of degree $k$ with a parent of degree greater
+		than $k+1$.
+		However, this fall into the condition either in part 2 or 3.
+		Depending on the colour of $s$, we can choose either of them to
+		perform and the resulting heap would be a $k+1$-black&white heap.
+
+		Consider case b.
+		After the operation, $b$ is now a white node with degree $k$.
+		There is only one black node of degree $k$, which is $s$.firstchild,
+		and its parent $s$ is of degree $k+1$.
+		Thus, the new heap is a $k+1$-black&white heap.
+
+		Combine all those cases above, the resulting heap is always
+		a $k+1$-black&white heap.
+
+		Since algorithm 1, 2 and 3 all runs in constant time, each line in this
+		algorithm runs in constant time. 
+		Also, each line is executed by at most once in this algorithm. 
+		Thus, the total run time for it is in constant time.
 
 	\item
 	\begin{comment}
@@ -277,6 +342,15 @@ heap.
 		function or, equivalently, maintain the invariant that there is one
 		token on each black node.
 	\end{comment}
+	
+		\begin{algorithmic}[1]
+			\Function{DECREASE-KEY}{$H,x,v$}
+				\State priority($x$) $\gets$ priority($x$) $- v$
+				\If{priority(parent($x$)) $>$ priority($x$)}
+					\State
+				\EndIf
+			\EndFunction
+		\end{algorithmic}
 
 \end{enumerate}
 
