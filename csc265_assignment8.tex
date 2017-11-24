@@ -76,10 +76,46 @@ heap.
 			\ElsIf{priority(parent($b'$)) $\leq$ priority($b'$)}
 				\State colour $b'$ white
 			\Else
-				\State swap $b$ and parent($b$)
-				\State colour $b$ white
-				\If(parent($b$) is a root)
-					\State colour parent($b$) white
+				\If{parent($b$) is black}
+					\State swap $b$ and parent($b$)
+					\State colour $b$ white
+					\If(parent($b$) is a root)
+						\State colour parent($b$) white
+					\EndIf
+				\ElsIf{parent($b'$) is black}
+					\State swap $b'$ and parent($b'$)
+					\State colour $b'$ white
+					\If{parent($b'$) is a root}
+						\State colour parent($b'$) white
+					\EndIf
+				\Else
+					\State $p \gets$ parent($b$)
+					\State $p' \gets$ parent($b'$)
+					\State $p$.firstchild $\gets b$.next
+					\State $p'$.firstchild $\gets b'$.next
+					\State $r \gets$ Union($b$, $b'$)
+					\Comment{$r$ is the root of the new binomial tree}
+					\State colour $r$.firstchild white
+					\If{priority($p$) $\leq$ priority($p'$)}
+						\State $r$.preceding $\gets p'$.preceding
+						\State $r$.next $\gets$ $p'$.next
+						\If{parent($p'$) $\neq$ NIL}
+							\State parent($r$) $\gets$ parent($p'$)
+							\If{parent($p'$).firstchild $= p'$}
+								\State parent($p'$).firstchild $\gets r$
+							\EndIf
+						\EndIf
+					\Else
+						\State $r$.preceding $\gets p$.preceding
+						\State $r$.next $\gets p$.next
+						\If{parent($p$) $\neq$ NIL}
+							\State parent($r$) $\gets$ parent($p'$)
+							\If{parent($p$).firstchild $= p'$}
+								parent($p$).firstchild $\gets r$
+							\EndIf
+						\EndIf
+					\EndIf
+					\State Union($p$, $p'$)
 				\EndIf
 			\EndIf
 		\end{algorithmic}
@@ -98,29 +134,31 @@ heap.
 		Then, after this operation, the number of black node of degree $k$ is
 		1, and thus the binomial heap is transformed into a $k+1$-black$\&$white
 		heap.
+		Also, the total number of black nodes reduces by 1.
 
 		Consider both $b$ and $b'$ has priorities less than their parents'
 		respectively.
-		Here I choose to swap $b$ with its parent.
-		After this operation, the node $b$ now stores the values of parent($b$)
-		and parent($b$) stores informations of $b$.
-		By the inequality, we can safely colour $b$ white no matter what colour
-		it was and still keep the forth property.
-		If parent($b$) is a root, in order to maintain the third property, $b$
-		should be coloured white. 
-		Note that, now, all children of parent($b$) is white and their priority
-		are	greater than or equal to the priority of the initial parent of $b$, 
-		which is also greater than the now priority(parent($b$)). 
-		Thus, we can safely colour it white.
-		By the condition, there is at most 1 black node with degree $k+1$
-		initially.
-		After the operation, there are at most 2 black nodes with degree $k+1$
-		and 1 black node with degree $k$.
-		Therefore the binomial heap is transformed into a $k+1$-black$\&$white
-		heap.
+		If either or their parent is black, we can swap the one with its black
+		parent and colour it white. 
+		By the inequlity of priorities in this case, the forth property is satisfied.
+		Now, there is only one black node of order $k$.
+		Thus, the new heap is a $k+1$-black$\&$white heap.
+		Also, the total number of black node reduces by one.
+
+		Otherwise, what the algorithm do here is break the $B_{k+1}$ subtrees
+		rooted at the parents of $b$ and $b'$ into four $B_{k}$ subtrees.
+		Then, reorder and recombine them into two new $B_{k+1}$ trees such that
+		one of them has a white root and the other has a black root. 
+		By the Union operation on binomial trees, the firstchild of each of
+		their root must have priorities greater than or equal to its parent,
+		which implies that we can recolour them white. 
+		After this operation, there would be no black nodes of degree $k$.
+		Therefore, the new heap is a $k+1$-black$\&$white heap.
+		Also, the total number of black nodes reduces by one.
 
 		Hence, we can always transform such a $k$-black$\&$white heap $H$ into a
-		$k+1$-black$\&$white heap.
+		$k+1$-black$\&$white heap and the total number of black nodes in the
+		heap goes down by 1.
 
 		Each line in this algorithm could be done in constant time and there is
 		no loop in this algotithm.
@@ -138,15 +176,15 @@ heap.
 	\end{comment}
 
 		\begin{algorithmic}[1]
-			\State $s \gets b$.precedingsibling
+			\State $s \gets b$.preceding
 			\If{priority(parent($b$)) $\leq$ priority($b$)}
 				\State colour $b$ white
 			\Else
-				\State swap $b$.nextsibling and $s$.firstchild.nextsibling
+				\State swap $b$.next and $s$.firstchild.next
 				\State swap $b$.parent and $s$.firstchild.parent
-				\State swap $s$.nextsibling and $s$.firstchild
-				\State swap $b$.precedingsibling and
-				$s$.firstchild.precedingsibling
+				\State swap $s$.next and $s$.firstchild
+				\State swap $b$.preceding and
+					$s$.firstchild.preceding
 			\EndIf
 		\end{algorithmic}
 
@@ -200,16 +238,21 @@ heap.
 	\end{comment}
 
 		\begin{algorithmic}[1]
-			\State $s \gets b$.percedingsibling
+			\State $s \gets b$.preceding
 			\If{priority(parent($b$)) $\leq$ priority($b$)}
 				\State colour $b$ white
 			\ElsIf{priority(parent($b$)) $\leq$ priority($s$)}
 				\State colour $s$ white
-				\State perform algorithm in 2.
+				\State perform algorithm in 2
 			\Else
-				\State swap $b$ and parent($b$)
+				\If{priority($s$) < priority($b$)}
+					\State swap $s$ and parent($b$)
+				\Else
+					\State swap $b$ and parent($b$)
+				\EndIf
+				\State colour $s$ white
 				\State colour $b$ white
-				\If(parent($b$) is a root)
+				\If{parent($b$) is root}
 					\State colour parent($b$) white
 				\EndIf
 			\EndIf
@@ -221,7 +264,7 @@ heap.
 		priority of $b$, then we can make $b$ white and it satisfies the forth
 		property.
 		After this operation, there is no node of degree $k$ with a parent of
-		degree greater than $k+1$.
+		degree greater than $k+1$ and the number of black nodes reduces by 1.
 		Thus, given the condition in this question, the new heap is a
 		$k+1$-black$\&$white heap. 
 
@@ -231,28 +274,30 @@ heap.
 		Then, Similar as the above case, we can make $s$ a white node. 
 		Now, the heap satisfies the condition in question 2, and thus, we can
 		perform the algorithm in 2, which gives us a $k+1$-black$\&$white heap.
+		Also, the number of black nodes goes down by 1.
 
 		Otherwise, both $s$ and $b$ have priorities less than their parent.
 		Since each white child of the parent has a priority greater than it,
-		the priority of $b$ is less than any of its white siblings.
-		Therefore, we can swap $b$ and its parent and still maintain the forth
-		property.
-		By the implementation of swap stated in 1, the pointer to $b$ is still
+		the priorities of $b$ and $s$ are less than any of its white siblings.
+		Therefore, we can swap any of $b$ and $s$ with its parent and still
+		maintain the forth property. 
+		Here I choose to swap the one with smaller priority.
+		By the implementation of swap stated in 1, the pointer to $b$ and $s$ is still
 		pointing to the same relative location in the heap.
-		By the inequality, we can safely colour $b$ white. 
+		By the inequality, we can safely colour $b$ and $s$ white. 
 		Notice that parent($b$) has a degree greater than $k+1$, and any
 		possible new black node in the tree is of degree greater than $k+1$.
-		Now, $b$ is a white node and parent($b$) is black. 
+		Now, parent($b$) is black. 
 		Suppose parent($b$) is a root, then it needs to be coloured white in
 		order to maintain property 3.
 		After all these operations, there is no black node of degree $k$ with a
-		parent of degree greater than $k+1$. 
+		parent of degree greater than $k+1$ and the total number of black nodes
+		reduces by 1. 
 		Hence, the new heap is a $k+1$-black$\&$white heap.
-		(Note that $s$ might have a parent of degree $k+2$, this does not
-		violate the fact that the new heap is a $k+1$-black$\&$white heap)
 
 		By these three cases above, the $k$-black$\&$white heap H could be
-		transformed into a $k+1$-black$\&$white heap.
+		transformed into a $k+1$-black$\&$white heap and the total number of
+		black nodes reduces by 1.
 
 		Since each operation in this algorithm runs in constant time and each
 		line is executed by at most once, the algorithm runs in constant time.
@@ -269,7 +314,7 @@ heap.
 	\end{comment}
 		
 		\begin{algorithmic}[1]
-			\State $s \gets b$.precedingsibling
+			\State $s \gets b$.preceding
 			\If{priority(parent($b$)) $\leq$ priority($b$)}
 				\State colour $b$ white
 			\ElsIf{$s$.firstchild is white}
@@ -295,7 +340,7 @@ heap.
 		forth property.
 		After colouring, there would be only 1 black node of degree $k$, and
 		no black node of degree $k$ with a parent of degree greater than $k+1$.
-		The new heap is a $k+1$-black&white heap.
+		The new heap is a $k+1$-black$\&$white heap.
 
 		Otherwise, first consider the case where the first child of $s$ is
 		white. 
@@ -306,17 +351,19 @@ heap.
 		Either case, the resulting heap still has 1 node of degree $k$, while
 		there is no node of degree $k$ with a parent of degree greater than
 		$k+1$.
-		The resulting heap will be a $k+1$-black&white heap.
+		Since $s$ is coloured white, the total number of black node reduces by
+		1.
+		The resulting heap will be a $k+1$-black$\&$white heap.
 
 		Now, consider when the first child of $s$ is black.
+		Then the first child of $s$ is just $b'$.
 		Algorithm in part 2 and 3 could not be directly performed here.
 		However, algorithm in part 1 could be performed as long as there are
 		two nodes of the same degree. 
-		Let the input for $b$ be $b$ and $b'$ be $s$.firstchild.
 
 		There could be two possible outcomes: \\
-		a. $s$.firschild is coloured white. \\
-		b. $b$ is swapped with its parent. 
+		a. $s$.firstchild is coloured white. \\
+		b. the else block is performed.
 
 		Note that priority($b$) < priority(parent($b$)).
 
@@ -325,16 +372,18 @@ heap.
 		than $k+1$.
 		However, this fall into the condition either in part 2 or 3.
 		Depending on the colour of $s$, we can choose either of them to
-		perform and the resulting heap would be a $k+1$-black&white heap.
+		perform and the resulting heap would be a $k+1$-black$\&$white heap.
+		Also, since $s$.firstchild is coloured white, the total number of black
+		nodes reduces by at least 1.
 
 		Consider case b.
-		After the operation, $b$ is now a white node with degree $k$.
-		There is only one black node of degree $k$, which is $s$.firstchild,
-		and its parent $s$ is of degree $k+1$.
-		Thus, the new heap is a $k+1$-black&white heap.
+		By 1, the resulting heap has no black node of degree $k$ and the total
+		number of black nodes reduces by 1.
+		Thus, the new heap is a $k+1$-black$\&$white heap.
 
 		Combine all those cases above, the resulting heap is always
-		a $k+1$-black&white heap.
+		a $k+1$-black$\&$white heap and the total number of black nodes in the
+		heap goes down by at least 1.
 
 		Since algorithm 1, 2 and 3 all runs in constant time, each line in this
 		algorithm runs in constant time. 
@@ -356,16 +405,126 @@ heap.
 
 		\begin{algorithmic}[1]
 			\Function{DECREASE-KEY}{$H,x,v$}
-				\State $s \gets b$.precedingsibling
 				\State priority($x$) $\gets$ priority($x$) $- v$
-				\If{priority(parent($x$)) $>$ priority($x$)}
+				\If{parent($x$) $\neq$ NIL and 
+				priority(parent($x$)) $>$ priority($x$)}
 					\If{$x$ is white}
 						\State colour $x$ black
 						\State $b \gets x$
+						\While{$b$ is black}
+							\State $k \gets$ degree($b$)
+							\If{$b$.preceding $=$ NIL}
+								\If{$A[k] =$ NIL}
+									\State $A[k] \gets b$
+									\State \textbf{break}
+								\Else
+									\State $b' \gets A[k]$
+									\State perform algorithm in part 1
+									\If{degree($b$) $= k$}
+										\State $b \gets$ parent($b$)
+									\EndIf
+									\State update $A$ such that $A$ is correct
+										except $b$ is not in $A$
+								\EndIf
+							\Else
+								\State $s \gets b$.preceding 
+								\If{$A[k]$ is NIL}
+									\If{$s$ is white}
+										\State perform algorithm in 2
+									\Else
+										\State perform algorithm in 3
+									\EndIf
+									\If{degree($b$) $= k$}
+										\State $b \gets$ parent($b$)
+									\EndIf
+									\State update $A$ such that $A$ is correct
+										except $b$ is not in $A$
+								\Else
+									\State $b' \gets A[k]$
+									\State perform algorithm in 4
+									\If{degree($b$) $= k$}
+										\State $b \gets$ parent($b$)
+									\EndIf
+									\State update $A$ such that $A$ is correct
+										except $b$ is not in $A$
+								\EndIf
+							\EndIf
+						\EndWhile
 					\EndIf
 				\EndIf
 			\EndFunction
 		\end{algorithmic}
+
+		The precondition for this algorithm is $H$ is a black$\&$white heap and
+		the array $A$ is correct.
+
+		$n$ is the number of nodes in this heap.
+		Then, the largest possible degree of each node is $\lceil \log_2 n
+		\rceil$, and thus, the size of $A$ is valid.
+
+		Let the initial black$\&$white heap $H_0$ has no black nodes.
+		Let $\Phi(H) =$ the number of black nodes in the heap.
+		Then $\Phi(H_0) = 0$ and $\forall i \in \mathbb{N}. \Phi(H_i) \geq 0$.
+
+		Suppose we perform DECREASE-KEY($H,x,v$) for the $i'$th time.
+
+		If, after decreasing the priority, the priority of $x$ is still greater
+		than its parent, or $x$ is a root, then the heap satisfy the condition
+		for a black$\&$white heap and the program halts in constant time.
+		Thus, the actual cost is some constant $c$ and $\Phi(H_i) -
+		\Phi(H_{i-1}) = 0$.
+		Therefore, the amortized cost in this case is $c \in O(1)$.
+
+		Otherwise, let's first consider when $x$ is already a black node.
+		Then, the new heap is also a black$\&$white heap and the algorithm
+		halts in constant time.
+		Therefore, the actual cost is some constant $c$ and $\Phi(H_i) -
+		\Phi(H_{i-1}) = 0$.
+		Then, the amortized cost is $c \in O(1)$.
+
+		Consider when $x$ is a white node.
+		Then, $x$ needs to be coloured black in order for the heap to become a
+		degree($x$)-black$\&$white heap and 1 new black node is introduced in
+		the heap.
+		The while loop then makes the degree higher until the whole heap becomes
+		a black$\&$white heap.
+
+		Now consider the run time of the while loop.
+
+		If the first inner if block on line 10 is performed in some iteration
+		of the while loop, then the loop halts after this iteration.
+
+		For any iteration of the while loop, if algorithm 1 or 3 or 4 is
+		performed, then the total number of black nodes must reduces by at
+		least 1, as shown in question 1, 3 and 4 respectively. 
+
+		Consider some iteration in which algorithm 2 is performed.
+		Then it must be the case where $b$ is black node whose parent has a
+		degree greater than $k+1$ and whose preceding sibling is white. \\
+		If the if block is performed then, $b$ is coloured white and the heap
+		is now a black$\&$white heap.
+		If the parent of $b$ is white, then the loop halts.
+		If the parent of $b$ is black, then $A[\text{parent}(b)] =$ parent(b)
+		and it is removed from $A$ in this iteration.
+		Then, the loop must halt in the next iteration where the first inner if
+		block is performed. \\
+		Otherwise, the else block is performed and $b$ becomes the first child
+		of $s$.
+		Since $s$ is white, the loop halts after this iteration.
+
+		Therefore, suppose $j$ is the total number of iteration for the while
+		loop, then $\Phi(H_i) - \Phi(H_{i-1}) \leq 1+2-j = 3-j$.
+		Notice that updateing $A$ only requires updating for the initial $A[k]$
+		and $b$, and potentially its parent and its preceding sibling. 
+		Thus, update $A$ could be done in constant time. 
+		Also, any other line in the loop runs in constant time.
+		Hence, the actual cost in this case is at most $c + j$ for some
+		constant $c$. 
+		Then, the amortized cost is at most $c+j+(3-j) = c+3 \in O(1)$.
+
+		Combine all these cases above, we can conclude that the amortized cost
+		of performing DECREASE-KEY($H,x,v$) is $O(1)$.
+
 
 \end{enumerate}
 
