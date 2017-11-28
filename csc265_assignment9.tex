@@ -27,7 +27,7 @@
 \begin{document}
 
 \begin{center}
-{\bf \Large \bf CSC265H Assignment 8}
+{\bf \Large \bf CSC265H Assignment 9}
 \end{center}
 
 \noindent
@@ -58,6 +58,88 @@ NO EXTRA MATERIAL CONSULTED\\
 		Prove that any breadth first search order of $G$ is also a breadth
 		frist search order of $G^2$
 	\end{comment}
+		\begin{lemma}
+			Let $T$ be the BFS tree of $G$ with root $r$.
+			For all $u, v \in V. u \neq v$, if $u$ has a child $c$ in $T$ and
+			$v$ has a child $c'$ in $T$, then in any BFS order of $G$ start
+			with $r$, $c'$ is visited after $c$ iff $v$ is visited after $u$.
+		\end{lemma}
+		\begin{proof}
+			Suppose $v$ is visited after $u$, then $c'$ is enqueued after $c$
+			and thus, $c'$ is visited after $c$. 
+
+			Suppose $c'$ is visited after $c$, then $c'$ is enqueued after $c$.
+			Notice that $c$ and $c'$ got enqueued in the loop where $u$ and $v$
+			are visited respectively. 
+			Since $u \neq v$, $c$ and $c'$ are not enqueued in the same loop.
+			By the assumption, the loop for $v$ is executed after the loop for
+			$u$, and thus, $v$ is visited after $u$.
+
+			Therefore, the lemma is true.
+		\end{proof}
+
+		\begin{lemma}
+			If $v$ appears after $u$ in a BFS order of $G$ starting from $w$,
+			then the height of $v$ is greater than or equal to the height of
+			$u$ in the BFS tree with root $w$.
+		\end{lemma}
+		\begin{proof}
+			Perform induction on the height of $u$ to prove this.
+
+			Let $P(h):$ "For all $u$ with height $h$, for all $v$ appears after
+			$u$ in a BFS order, the height of $v$ is greater than or equal to
+			the height of $u$".
+			We want to prove that $\forall h \in \mathbb{N}. P(h)$. 
+
+			For simplicity, let $h(v)$ denote the the height of any vertex $v$
+			in the BFS tree. 
+
+			\textbf{Base Case:} $h=0$
+			\begin{addmargin}[1em]{0em}
+				Then $u$ can only be $w$.
+				Since $w$ is just the root, $h(w) = 0$ and $h(v) \geq 0$ for
+				any vertex $v$.
+				Thus, $P(0)$ is true.
+			\end{addmargin}
+
+			Suppose $P(x)$ is true for $x = h$, where $h \in \mathbb{N}$
+			is arbitrary.
+			Let $u$ be any node s.t. $h(u) =  h+1$.
+			Then, $u$ is not the root.
+			Thus, parent($u$) exists, and it appears before $u$ in any BFS
+			order with root $w$.
+			The height of parent($u$) is exactly $h$.
+			Consider a $v$ which appears after $u$ in a BFS order.
+			$v$ cannot be the root, or otherwise the root appears twice in the
+			order. 
+			It follows that $h(v) \geq 1$.
+			Then parent($v$) exists.
+			If parent($u$) $=$ parent($v$), then $h(v) = h+1$ and we are done.
+			Otherwise, since $v$ appears after $u$, by BFS, parent($v$) must
+			also appears after parent($u$).
+			By the assuption above, $h = h(\text{parent}(u)) \leq
+			h(\text{parent}(v))$.
+			Then, $h(v) > h(\text{parent}(v)) \geq h$, and thus, $h(v) \geq
+			h+1$. 
+			Therefore, $P(h+1)$ is true.
+
+			By induction, $\forall h \in \mathbb{N}. P(h)$.
+			
+			Hence, the lemma is true.
+		\end{proof}
+
+		\begin{proof}
+			Suppose that for an arbitrary graph $G$, there exists a breadth first
+			searh order of $G$ that is not a breadth first search order of
+			$G^2$. Let $\sigma: v_1, v_2, \cdots, v_n$ be the order.
+
+			Let $T$ be the BFS tree of $G$ with root $v_1$, and $T'$ be the
+			BFS tree of $G^2$ with root $v_1$ as well.
+			Let $h(v)$ denote the height of $v$ in $T$ and $h'(v)$ bw the
+			height of $v$ in $T'$.
+
+
+		\end{proof}
 
 	\item
 	\begin{comment}
@@ -65,17 +147,54 @@ NO EXTRA MATERIAL CONSULTED\\
 		of $G^2$ that is not a breadth first search order of $G$
 	\end{comment}
 
+	\begin{proof}
+		Let $V = \{v_1, v_2, v_3\}$ and $E = \{(v_1, v_2), (v_2, v_3)\}$.
+		Let $G=(V,E)$ and $G^2 = (V< E^2)$.
+		Notice that $(v_1, v_3) \in E^2$.
+		Then, consider a BFS order $v_1, v_3, v_2$ of $G^2$.
+		This is not a BFS order of $G$, since $v_2$ must be visited directly
+		after $v_1$ if starting from $v_1$.
+
+		Thus, the statement is true.
+	\end{proof}
+
 	\item
 	\begin{comment}
 		Prove that, for some graph $G$, there is a depth first search order of
 		$G$ that is not a depth first search order of $G^2$
 	\end{comment}
+	\begin{proof}
+		Let $V = \{v_1, v_2, v_3, v_4, v_5\}$ and $E = \{(v_1, v_2), (v_2,
+		v_3), (v_3, v_1), (v_1, v_4), (v_2, v_5), (v_5, v_3)\}$.
+		Then, $v_1, v_2, v_3, v_5, v_2$ is a DFS order of $G$.
+		Notice that $(v_3, v_4) \in E^2$ since $(v_3, v_1)$ and $(v_1, v_2)$
+		are edges in $E$.
+		Consider performing the same DFS order on $G^2$.
+		At $v_3$, there is an edge from $v_3$ to $v_2$ and there is no edge
+		from $v_3$ to $v_5$.
+		Thus, $v_2$ must be next vertex, which is contradicted to the DFS
+		order.
+		Therefore, $v_1, v_2, v_3, v_5$, is not a DFS order of $G^2$.
+
+		Hence, the statement if true.
+	\end{proof}
 
 	\item
 	\begin{comment}
 		Prove that, for some graph $G$, there is a depth frist search order of
 		$G^2$ that is not a depth first search order of $G$
 	\end{comment}
+	\begin{proof}
+		Let $V = \{v_1, v_2, v_3\}$ and $E = \{(v_1, v_2), (v_2, v_3)\}$.
+		Let $G=(V,E)$ and $G^2 = (V, E^2)$.
+		Then, $(v_1, v_3) \in E^2$.
+		Consider a DFS order $v_1, v_3, v_2$ of $G^2$.
+		This is not a DFS order of $G$, since starting from $v_1$, $v_2$ must
+		be visited directly afterwords.
+
+		Thus, the statement is true.
+	\end{proof}
+
 \end{enumerate}
 
 \end{document}
