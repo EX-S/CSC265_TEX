@@ -1,0 +1,82 @@
+\documentclass[10pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{fullpage}
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{scrextend}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\newcommand{\iimplies}{\mbox{ IMPLIES }}
+\newcommand{\oor}{\mbox{ OR }}
+\newcommand{\aand}{\mbox{ AND }}
+\newcommand{\nnot}{\mbox{ NOT }}
+\newcommand{\iiff}{\mbox{ IFF }}
+\newcommand{\xxor}{\mbox{ XOR }}
+%\newcommand{\algorithmicbreak}{\textbf{break}}
+%\newcommand{\Break}{\State \algorithmicbreak}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\begin{document}
+
+\begin{center}
+{\bf \Large \bf CSC265H Assignment 9}
+\end{center}
+
+\noindent
+Yibin Zhao\\
+1002996261\\
+NO OUTSIDE DISCUSSION\\
+NO EXTRA MATERIAL CONSULTED\\
+
+\begin{comment}
+	Give an algorithm that, given a directed graph $G=(V,E)$ which contains no
+	directed cycle and a weight function $w: E \rightarrow \mathbb{R}$, find
+	a maximum weight path in $O(|V|+|E|)$ time.
+
+	Prove that your algorithm is correct and has the required time complexity.
+\end{comment}
+
+\begin{algorithmic}[1]
+	\Function{MAXPATH}{$G$}
+		\ForAll{$v \in V$}
+			\State $d[v] \gets -1$
+			\Comment{$d$ is global}
+		\EndFor
+		\State maximum $\gets 0$
+		\ForAll{$v \in V$}
+			\If{$d[v] < 0$}
+				\State \Call{MAXSPATH}{$G, v$}
+				\If{$d[v] >$ maximum}
+					\State maximum $\gets d[v]$.
+				\EndIf
+			\EndIf
+		\EndFor
+		\Return maximum
+	\EndFunction
+\end{algorithmic}
+
+\begin{algorithmic}[1]
+	\Function{MAXSPATH}{$G, s$}
+		\ForAll{$u \in V$ such that $(v, u) \in E$}
+			\If{$d[u] < 0$}
+				\State \Call{MAXSPATH}{$G, u$}
+			\EndIf
+			\If{$d[v] < d[u] + w((u, v))$}
+				\State $d[v] \gets d[u] + w((u,v))$ 
+			\EndIf
+		\EndFor
+		\If{$d[v] < 0$}
+			\State $d[v] \gets 0$
+		\EndIf
+	\EndFunction
+\end{algorithmic}
+
+\end{document}
