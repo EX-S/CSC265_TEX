@@ -78,55 +78,6 @@ NO EXTRA MATERIAL CONSULTED\\
 			Therefore, the lemma is true.
 		\end{proof}
 
-		\begin{lemma}
-			If $v$ appears after $u$ in a BFS order of $G$ starting from $w$,
-			then the height of $v$ is greater than or equal to the height of
-			$u$ in the BFS tree with root $w$.
-		\end{lemma}
-		\begin{proof}
-			Perform induction on the height of $u$ to prove this.
-
-			Let $P(h):$ "For all $u$ with height $h$, for all $v$ appears after
-			$u$ in a BFS order, the height of $v$ is greater than or equal to
-			the height of $u$".
-			We want to prove that $\forall h \in \mathbb{N}. P(h)$. 
-
-			For simplicity, let $h(v)$ denote the the height of any vertex $v$
-			in the BFS tree. 
-
-			\textbf{Base Case:} $h=0$
-			\begin{addmargin}[1em]{0em}
-				Then $u$ can only be $w$.
-				Since $w$ is just the root, $h(w) = 0$ and $h(v) \geq 0$ for
-				any vertex $v$.
-				Thus, $P(0)$ is true.
-			\end{addmargin}
-
-			Suppose $P(x)$ is true for $x = h$, where $h \in \mathbb{N}$
-			is arbitrary.
-			Let $u$ be any node s.t. $h(u) =  h+1$.
-			Then, $u$ is not the root.
-			Thus, parent($u$) exists, and it appears before $u$ in any BFS
-			order with root $w$.
-			The height of parent($u$) is exactly $h$.
-			Consider a $v$ which appears after $u$ in a BFS order.
-			$v$ cannot be the root, or otherwise the root appears twice in the
-			order. 
-			It follows that $h(v) \geq 1$.
-			Then parent($v$) exists.
-			If parent($u$) $=$ parent($v$), then $h(v) = h+1$ and we are done.
-			Otherwise, since $v$ appears after $u$, by BFS, parent($v$) must
-			also appears after parent($u$).
-			By the assuption above, $h = h(\text{parent}(u)) \leq
-			h(\text{parent}(v))$.
-			Then, $h(v) > h(\text{parent}(v)) \geq h$, and thus, $h(v) \geq
-			h+1$. 
-			Therefore, $P(h+1)$ is true.
-
-			By induction, $\forall h \in \mathbb{N}. P(h)$.
-			
-			Hence, the lemma is true.
-		\end{proof}
 
 		\begin{proof}
 			Suppose that for an arbitrary graph $G$, there exists a breadth first
@@ -135,8 +86,81 @@ NO EXTRA MATERIAL CONSULTED\\
 
 			Let $T$ be the BFS tree of $G$ with root $v_1$, and $T'$ be the
 			BFS tree of $G^2$ with root $v_1$ as well.
-			Let $h(v)$ denote the height of $v$ in $T$ and $h'(v)$ bw the
-			height of $v$ in $T'$.
+
+			Let $p_i: v_1, v_2, \cdots, v_i$ be the prefix of this order with size
+			$i$, where $0 \leq i \leq n$.
+			Then, there exists such $0 < i < n$ that there exists a BFS order of $G^2$
+			with prefix $p_i$ and there is no BFS order of $G^2$ with prefix
+			$p_{i+1}$.
+			Note that since $v_1$ is the starting point of a BFS, $v_1$
+			is in $p_1$ of a BFS order of $G^2$, and thus, it is safe to
+			assume $i > 0$.
+			There must exists a parent of $v_{i+1}$ in $T'$ ( denote it by
+			parent'($v_{i+1}$)), since $v_{i+1}$ is not the root.
+			Similarly, parent($v_{i+1}$) also exists.
+
+			Now, consider all the cases that $p_{i+1}$ is invalid given that
+			$p_i$ is valid. 
+			
+			Suppose parent'($v_{i+1}$) is not in $p_i$.
+			Since $p_{i+1}$ is a valid prefix for $G$, parent($v_{i+1}$) is in
+			$p_{i}$.
+			If parent($v_{i+1}$) $=$ parent'($v_{i+1}$), this is
+			a contradiction.
+			If parent($v_{i+1}$) $\neq$ parent'($v_{i+1}$), then
+			parent'($v_{i+1}$) must be visited before parent($v_{i+1}$), or
+			otherwise, since there is an edge from parent($v_{i+1}$) to
+			$v_{i+1}$, parent($v_{i+1}$) would be equal to parent'($v_{i+1}$).
+			This is also a contradiction.
+
+			Consider parent'($v_{i+1}$) is in $p_i$.
+			Recall that parent($v_{i+1}$) must also be a vertex in $p_i$. 
+			If $v_{i}$ has a parent in $T'$, then parent'($v_i$) $\neq$
+			parent'($v_{i+1}$), or otherwise, $p_{i+1}$ is a valid prefix for
+			$G^2$.
+
+			Suppose parent'($v_i$) is visited after parent'($v_{i+1}$), then
+			$v_{i+1}$ must got enqueued before $v_{i}$.
+			This implies that $p_i$ is not a valid prefix, which is
+			a contradiction.
+
+			Consider parent'($v_i$) is visited before parent'($v_{i+1}$). 
+			In order for $p_{i+1}$ be invalid given that $p_i$ is valid, there
+			must exists a vertex $v_j$ in $p_i$ such that $v_j$ is in between
+			parent'($v_i$) and parent'($v_{i+1}$) and $v_j$ has a child in $T'$.
+			Denote the child of $v_j$ in $T'$ be $c'$. 
+			Then, $c'$ is not a vertex in $p_{i+1}$. \\
+			If parent($c'$) $=$ parent'($c'$), then parent($c'$) is visited
+			before parent($v_{i+1}$), and thus, for the BFS order of $G$, $c'$
+			must be visited before $v_{i+1}$.
+			That is, $c'$ must be a vertex in $p_i$, which is contradict to the
+			assumption. \\
+			Otherwise, parent($c'$) $\neq$ parent'($c'$). 
+			We can get parent'($c'$) is visited before parent($c$) is visited. 
+			Then, there exists a vertex $u$ such that (parent'($c'$), $u$)
+			and ($u$, $c'$) are edges in $E$. 
+			Thus, $u$ must be visited before $v_{i+1}$, since
+			parent'($c'$) is visited before parent($v_{i+1}$). 
+			Also, either $u$ is parent($c'$) or $u$ is visited after
+			parent($c'$), since otherwise, by the edge $(u, c')$, $c'$ must got
+			enqueued before parent($c'$) is visited and that, $p_i$ is not
+			a valid for graph $G$. 
+			This implies that parent($c'$) is visited before parent($v_{i+1}$). 
+			Then, $c'$ must also be visited before $v_{i+1}$ in the BFS order
+			of $G$. 
+			This is contradict to the assumption. 
+
+			By proof of contradiction, there is no such $i$ that $p_i$ is valid
+			and $p_{i+1}$ is invalid prefix of BFS order of $G^2$. 
+			Recall that $p_1$ is always valid.
+			By well ordering principle, $\forall i \in \{1, \cdots, n\}. p_i$
+			is a valid prefix of BFS order of $G^2$.
+			Notice that $p_n$ is just the order itself. 
+			This directly follows that the order $v_1, \cdots, v_n$ is a BFS
+			order of $G^2$. 
+
+			By generalization, we can conclude that any BFS order of $G$ is
+			a BFS order of $G^2$.
 
 
 		\end{proof}
@@ -149,7 +173,7 @@ NO EXTRA MATERIAL CONSULTED\\
 
 	\begin{proof}
 		Let $V = \{v_1, v_2, v_3\}$ and $E = \{(v_1, v_2), (v_2, v_3)\}$.
-		Let $G=(V,E)$ and $G^2 = (V< E^2)$.
+		Let $G=(V,E)$ and $G^2 = (V, E^2)$.
 		Notice that $(v_1, v_3) \in E^2$.
 		Then, consider a BFS order $v_1, v_3, v_2$ of $G^2$.
 		This is not a BFS order of $G$, since $v_2$ must be visited directly
@@ -167,16 +191,16 @@ NO EXTRA MATERIAL CONSULTED\\
 		Let $V = \{v_1, v_2, v_3, v_4, v_5\}$ and $E = \{(v_1, v_2), (v_2,
 		v_3), (v_3, v_1), (v_1, v_4), (v_2, v_5), (v_5, v_3)\}$.
 		Then, $v_1, v_2, v_3, v_5, v_2$ is a DFS order of $G$.
-		Notice that $(v_3, v_4) \in E^2$ since $(v_3, v_1)$ and $(v_1, v_2)$
+		Notice that $(v_3, v_4) \in E^2$ since $(v_3, v_1)$ and $(v_1, v_4)$
 		are edges in $E$.
 		Consider performing the same DFS order on $G^2$.
-		At $v_3$, there is an edge from $v_3$ to $v_2$ and there is no edge
+		At $v_3$, there is an edge from $v_3$ to $v_2$ and there are no edges
 		from $v_3$ to $v_5$.
-		Thus, $v_2$ must be next vertex, which is contradicted to the DFS
+		Thus, $v_2$ must be the next vertex, which is contradicted to the DFS
 		order.
 		Therefore, $v_1, v_2, v_3, v_5$, is not a DFS order of $G^2$.
 
-		Hence, the statement if true.
+		Hence, the statement is true.
 	\end{proof}
 
 	\item
@@ -189,8 +213,7 @@ NO EXTRA MATERIAL CONSULTED\\
 		Let $G=(V,E)$ and $G^2 = (V, E^2)$.
 		Then, $(v_1, v_3) \in E^2$.
 		Consider a DFS order $v_1, v_3, v_2$ of $G^2$.
-		This is not a DFS order of $G$, since starting from $v_1$, $v_2$ must
-		be visited directly afterwords.
+		This is not a DFS order of $G$, $v_2$ must be visited directly after $v_i$.
 
 		Thus, the statement is true.
 	\end{proof}
