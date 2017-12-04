@@ -50,16 +50,18 @@ NO EXTRA MATERIAL CONSULTED\\
 			\State $d[v] \gets -1$
 			\Comment{$d$ is global}
 		\EndFor
-		\State maximum $\gets 0$
+		\State $V' \gets \phi$
+		\State max $\gets -1$
 		\ForAll{$v \in V$}
 			\If{$d[v] < 0$}
 				\State \Call{MAXSPATH}{$G, v$}
-				\If{$d[v] >$ maximum}
-					\State maximum $\gets d[v]$.
-				\EndIf
 			\EndIf
+			\If{$d[v] >$ max}
+				\State max $\gets d[v]$
+			\EndIf
+			\State $V' \gets V' \cup \{v\}$
 		\EndFor
-		\State \Return maximum
+		\State \Return max
 	\EndFunction
 \end{algorithmic}
 
@@ -67,18 +69,255 @@ NO EXTRA MATERIAL CONSULTED\\
 
 \begin{algorithmic}[1]
 	\Function{MAXSPATH}{$G, s$}
-		\ForAll{$u \in V$ such that $(v, u) \in E$}
+		\ForAll{$u \in V$ such that $(s, u) \in E$}
 			\If{$d[u] < 0$}
 				\State \Call{MAXSPATH}{$G, u$}
 			\EndIf
-			\If{$d[v] < d[u] + w((u, v))$}
-				\State $d[v] \gets d[u] + w((u,v))$ 
+			\If{$d[s] < d[u] + w((s, u))$}
+				\State $d[s] \gets d[u] + w((s, u))$ 
 			\EndIf
 		\EndFor
-		\If{$d[v] < 0$}
-			\State $d[v] \gets 0$
+		\If{$d[s] < 0$}
+			\State $d[s] \gets 0$
 		\EndIf
 	\EndFunction
 \end{algorithmic}
+
+\vspace{5mm}
+
+Proof of correctness and complexity:
+
+\begin{lemma}
+	For any graph $G$, if $G$ contains no directed cycle, then there exists $v
+	\in V$ such that $v$ has no out-neighbour, and each path consists
+	of at most $n$ vertices
+\end{lemma}
+\begin{proof}
+	Let $|V| = n$.
+
+	Suppose there exists a path $p$ with $n+1$ vertices.
+	Since $n+1 > n$, there must be at least two vertices $p_i$ and $p_j$, $i
+	\neq j$ and $p_i = p_j$.
+	Then, there is a directed cycle in the graph.
+	This is a contradiction.
+	
+	Therefore, each path consists of at most $n$ vertices. 
+	
+	Suppose that for each $v$ in $V$, $v$ has a out-neighbour.
+	Then, since each vertex has a out-neighbout, there exists a path $p$(not
+	necessarily simple) with $n+1$ vertices.
+	This contradicts to the above conclusion. 
+
+	Therefore, there exists some vertex with no out-neighbour.
+\end{proof}
+
+\begin{lemma}
+	$d[s] \geq 0$ iff MAXSPATH($G, s$) has been executed.
+\end{lemma}
+\begin{proof}
+	All $d[v]$ are initialized as -1.
+
+	Suppose $d[s] \geq 0$, then, by the algorithm, it is easy to see that
+	MAXPATH($G,s$) must have been executed.
+
+	Suppose MAXPATH($G,s$) has been executed for some $s \in V$.
+	After line 9, if $d[s]$ is still negative, then the if block on line 10-12
+	is executed and $d[s] \geq 0$.
+	Otherwise, $d[s] \geq 0$ alreay, and we are done.
+
+	Therefore, the statement is true.
+\end{proof}
+
+\begin{lemma}
+	For any vertex $s$,, after MAXSPATH($G, s$) is performed, $d[s]$ is the
+	weight of the maximum weight path with starting vertex $s$.
+\end{lemma}
+\begin{proof}
+	By lemma1, there always exists some vertex $v \in V$ such that $v$ has no
+	out-neighbours. 
+	Thus, we can perform structual induction to prove this statement. 
+	Let $P(s)$ be the predicate that "After MAXSPATH($G, s$) is performed,
+	$d[s]$ is the weight of the maximum weight path with starting vertex $s$",
+	where $s \in V$. 
+	We want to prove $\forall s \in V. P(s)$
+
+	\textbf{Base Case:} $s$ has no out-neighbours.
+	\begin{addmargin}[1em]{0em}
+		Then the maximum weight path with staring point $s$ is just 0. 
+		
+		Notice that, the for loop on line 2-9 is not executed.
+		By line 7 in MAXPATH and line 3 in MAXSPATH, we garantee to have
+		$d[s] < 0$ before MAXSPATH($G, s$) is performed. 
+		Then, the if block on line 10-12 must be executed, and thus $d[s] = 0$
+		after MAXSPATH($G, s$) is executed. 
+
+		Therefore, $P(s)$ is true.
+	\end{addmargin}
+
+	\textbf{Inductive Step:}
+	\begin{addmargin}[1em]{0em}
+		Suppose $s$ has a out-neighbour and for all out-neighbours $u$ of $s$,
+		$P(u)$ holds. 
+		Want to prove $P(s)$.
+
+		By line 7 in MAXPATH and line 3 in MAXSPATH, we garantee to have $d[s]
+		< 0$ before MAXSPATH($G, s$) is performed.
+
+		Suppose after the MAXSPATH is performed, $d[s]$ is not the maximum
+		weight path with source $s$.
+		Then, there exists some path $p: s, p_1, p_2, \ldots, p_k$ such that
+		$p$ is the path with maximum weight from source $s$. 
+		This follows that $d[s] < w(p)$ in any iteration on the for loop.
+		Since, there is no directed cycles in $G$, $p$ is a simple path. 
+		
+		If $k \geq 1$
+		Then, $(s, p_1) \in E$, and that that, $p_1$ is a out-neightbour of
+		$s$. 
+		Then, by the assumption, the weight of $p_1, p_2, \ldots, p_k$ is at
+		most $d[p_1]$.
+		Then, $w(p_1) \leq w((s, p_1)) + d[p_1]$.
+		Consider during the iteration where $u = p_1$.
+		At line 6, $d[s] < d[u] + w((s, u))$ is  satisfied and thus, line
+		7 is performed.
+		Therefore, after this iteration, $d[s] = d[u] + w((s, u)) \geq w(p_1)$.
+		By the implementation, $d[s]$ is non-decreasing after each iteration of
+		the for loop.
+		Then, after the last iteration, $d[s] \geq d[p_1] + w((s, p_1)) \geq
+		w(p_1)$.
+		This is a contradiction. 
+
+		Consider $k = 0$. 
+		Then the maximum weight path is just $p: s$.
+		(e.g. All out-edges from $s$ are negative-weighted) 
+		If $d[s] \geq 0$ after line 9, then $d[s] \geq w(p) = 0$.
+		Otherwise, line 11 is performed and $d[s] = 0 \geq w(p) = 0$.
+		This is a contradiction. 
+
+		Conbine these two cases, we can conclude that $d[s]$ is the weight of
+		the maximum weight path with source $s$.
+		That is, $P(s)$ is true.
+	\end{addmargin}
+
+	By induction, we can conclude that the statement is true. 
+\end{proof}
+
+
+Consider the loop invariant for the for loop on line 7-15 in MAXPATH.
+
+\textbf{Loop Invariant:} 
+	(1) $\forall v \in V'. d[v]$ is the weight of the maximum weight path from
+	source $v$.\\ 
+	(2) max $= \max\{d[v] | v \in V'\}$.
+
+\begin{proof}
+	Initially, $V'$ is empty, and thus, the loop invariant holds (1) automatically.
+	Since all $d[v] = -1 = \max$, loop invariant (2) also holds. 
+
+	Now, consider any iteration of the for loop.
+
+	If $d[v] < 0$ at the beginning of this iteration, then the condition on
+	line 8 is satisfied and MAXSPATH($G, v$) is executed. 
+	By lemma 3, after line 9, $d[v]$ is the weight of the maximum weight path
+	from $v$ and the loop invariant(1) holds.
+	
+	Otherwise, $d[v] \geq 0$. 
+	By lemma 2, MAXSPATH must has been executed before this iteration.
+	Then, by lemma 3, $d[v]$ is the weight of the maximum weight path from $v$
+	and the loop invariant (1) hold.
+
+	Combine these two cases, we can conclude that after each iteration of this
+	for loop, loop invariant (1) holds. 
+
+	To prove loop invariant (2), use induction.
+	Base case is shown at the beginning of this proof. 
+
+	Let $v_i$ be the vertex $v$ in the $i$th iteration.
+	Suppose after the $i$th iteration, loop invariant (2) is true, where $i \in
+	\mathbb{N}$.
+	Consider the $i+1$th iteration. 
+
+	If line 12 is performed, then the new max is greater than the old max and
+	is equal to $d[v_{i+1}]$.
+	Immediatly After this iteration, $\max\{d[v] | v \in V'\} = d[v_{i+1}]
+	= \max$
+	Thus, loop invariant (2) holds.
+
+	Otherwise, $d[v_{i+1}] \leq max$, and by the assuption, loop invariant
+	holds. 
+
+	Therefore, by these two cases, loop invariant (2) holds for the $i+1$th
+	iteration. 
+
+	Hence, by induction, loop invariant (2) is true.
+\end{proof}
+
+Correctness of MAXSPATH($G,s$)
+
+Precondition: $G=(V,E)$ is a directed graph with no directed cycles, $s \in V$,
+$d[s] = -1$. \\
+Postcondition: $G$ is unchanged and $d[s]$ is the weight of the maximum path
+with source $s$.
+
+\begin{proof}
+	By lemma 3, partial correctness holds.
+
+	By lemma 1, all path starting from $s$ consists of at most $n$ vertices. 
+	Thus, if MAXSPATH$(G, s)$ is called, it guarantee to have at most $n$
+	recursive depth. 
+
+	The base case is when $s$ has no out-neighbour.
+	The for loop is not performed and the program halts.
+
+	Suppose for all out-neighbour $u$ of $s$, MAXSPATH($G,u$) halts.
+	Then, the for loop runs at most $n$ times, and each iteration halts. 
+	Thus, the algorithms halts for MAXSPATH($G,s$).
+
+	Hence, by induction, we can conclude that the algorithms halts.
+
+	Therefore, the algorithm is correct.
+\end{proof}
+
+Correctness of MAXPATH($G$)
+
+Precondition: $G=(V,E)$ is a directed graph with no directed cycles. \\
+Postcondition: $G$ is unchanged and the function returns the weight of the
+maximum weight path.
+
+\begin{proof}
+	By line 7 and 14, after the loop on line 7-15 halts, $V' = V$.
+	Then, by loop invariant, after the for loop on line 7-15 is executed, $\max
+	= \max\{d[v] | v \in V\}$, and by the correctness of MAXSPATH, each
+	$d[v]$ is the weight of the maximum path starting from $v$. 
+	Note that the weight of a maximum weight path is always non-negative, since
+	a path with no edges is of weight 0, and thus, we are safe to initialize
+	each $d[v]$ and max by -1. 
+
+	Let the weight of the maximum weight path $p: p_1, p_2, \cdots, p_k$ be
+	$w(p)$, then after line 15, $d[p] = w(p)$ and $w(p) \geq d[v]$ for all $v
+	\in V$. 
+	Since $\max = \max\{d[v] | v \in V\}$, $\max = w(p)$, and thus, the
+	algorithm returns the correct answer. 
+
+	Consider the halting of this algorithm.
+
+	The first for loop runs $|V| = n$ iterations and each iteration runs in
+	constant time.
+	
+	Consider the second for loop from line 7-15. 
+	There are in tital $n$ iterations, and for each iteration, by the
+	correctness of MAXSPATH, the iteration halts.
+	Thus the second for loop halts. 
+
+	Therefore, this algorithm halts. 
+
+	Hence, by the partial correctness and the halting of this algorithm, the
+	algorithm is correct.
+\end{proof}
+
+Complexily of MAXPATH is $O(|E|+|V|)$
+\begin{proof}
+	
+\end{proof}
+
 
 \end{document}
