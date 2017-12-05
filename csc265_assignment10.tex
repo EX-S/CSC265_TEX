@@ -85,6 +85,7 @@ NO EXTRA MATERIAL CONSULTED\\
 
 \vspace{5mm}
 
+\setlength\parindent{0pt}
 Proof of correctness and complexity:
 
 \begin{lemma}
@@ -129,7 +130,7 @@ Proof of correctness and complexity:
 \end{proof}
 
 \begin{lemma}
-	For any vertex $s$,, after MAXSPATH($G, s$) is performed, $d[s]$ is the
+	For any vertex $s$, after MAXSPATH($G, s$) is performed, $d[s]$ is the
 	weight of the maximum weight path with starting vertex $s$.
 \end{lemma}
 \begin{proof}
@@ -146,7 +147,7 @@ Proof of correctness and complexity:
 		Then the maximum weight path with staring point $s$ is just 0. 
 		
 		Notice that, the for loop on line 2-9 is not executed.
-		By line 7 in MAXPATH and line 3 in MAXSPATH, we garantee to have
+		By line 7 in MAXPATH and line 3 in MAXSPATH, we guarantee to have
 		$d[s] < 0$ before MAXSPATH($G, s$) is performed. 
 		Then, the if block on line 10-12 must be executed, and thus $d[s] = 0$
 		after MAXSPATH($G, s$) is executed. 
@@ -160,7 +161,7 @@ Proof of correctness and complexity:
 		$P(u)$ holds. 
 		Want to prove $P(s)$.
 
-		By line 7 in MAXPATH and line 3 in MAXSPATH, we garantee to have $d[s]
+		By line 7 in MAXPATH and line 3 in MAXSPATH, we guarantee to have $d[s]
 		< 0$ before MAXSPATH($G, s$) is performed.
 
 		Suppose after the MAXSPATH is performed, $d[s]$ is not the maximum
@@ -171,7 +172,7 @@ Proof of correctness and complexity:
 		Since, there is no directed cycles in $G$, $p$ is a simple path. 
 		
 		If $k \geq 1$
-		Then, $(s, p_1) \in E$, and that that, $p_1$ is a out-neightbour of
+		Then, $(s, p_1) \in E$, and that that, $p_1$ is a out-neighbour of
 		$s$. 
 		Then, by the assumption, the weight of $p_1, p_2, \ldots, p_k$ is at
 		most $d[p_1]$.
@@ -316,7 +317,50 @@ maximum weight path.
 
 Complexily of MAXPATH is $O(|E|+|V|)$
 \begin{proof}
+	Let the number of comparisons and assignments be the run time of this
+	algorithm. 
+	Let $C(A)$ denote the run time of algorithm $A$.
 	
+	By lemma 2 and conditions on line 8 of MAXPATH and on line 3 of MAXSPATH,
+	for each vertex $v$, MAXSPATH($G, v$) is at most called once.
+	Thus, there are in total at most $|V| = n$ MAXSPATH calls. 
+
+	For each iteration in the for loop of MAXSPATH with outneighbour $u$, the
+	run time is at most $3 + C(\mbox{MAXSPATH}(G,u))$.
+	Since we have the constrain on the number of time a MAXSPATH$(G,v)$ is
+	performed, and there might be multiple vertices sharing a same
+	out-neighbour, here we just consider the run time of MAXSPATH($G,s$)
+	subtract by all nested MAXSPATH($G, u$) calls. 
+	Then, the run time of the for loop subtractiong all MAXSPATH($G, u$) calls
+	is at most $|\{u \text{ out-neighbour of } s\}|$.
+	Thus, in total, the run time of MAXSPATH with out all nested MAXSPATH is at
+	most 
+	$$2 + 3|\{u \text{ out-neighbour of } s\}|$$
+	Note that for $s$ with no out-neighbours, the run time above is just the
+	upper bound of its actual run time. 
+
+	The run time for the first for loop in MAXPATH is exactly $|V|$. 
+
+	Consider the second for loop from line 7 to 15.
+	Similar what I did for the for loop in MAXSPATH, let's just consider the
+	run time of this for loop subtracting the run time of all MAXSPATH. 
+	Then, for each iteration, there are at most 4 operations exculding the
+	MAXSPATH call. 
+	Thus, in total, the run time is at most $4|V|$. 
+	
+	Now, consider the total run-time of all MAXSPATH($G, s$). 
+	Recall that for each $v \in V$, MAXSPATH($G, v$) is at most performed once. 
+	Then, we can sum the run time for each MAXSPATH($G, v$) without its nested
+	MAXSPATH($G, v$) and add the run time of MAXSPATH($G,s$) for $s$ with no
+	out-neighbours, and by this telescoping we can get the total run time.
+	By the note above, this is just 
+	$$\sum_{v \in V}(2+3|\{u \text{ out-neighbour of } v\}|) = 2|V| + 3|E|$$. 
+
+	Therefore, the total run time of the for loop from line 7 to 15 is at most
+	$6|V| + 3|E|$.
+
+	Combine the first for loop and line 5, 6, 16, the total run time of
+	MAXPATH($G$) is at most $7|V|+3|E|+3 \in O(|E|+|V|)$
 \end{proof}
 
 
