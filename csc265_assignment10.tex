@@ -10,6 +10,9 @@
 \usepackage{scrextend}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage[margin=.5in]{geometry}
+\usepackage{parcolumns}
+\usepackage{kantlipsum}
 
 \newcommand{\iimplies}{\mbox{ IMPLIES }}
 \newcommand{\oor}{\mbox{ OR }}
@@ -44,6 +47,9 @@ NO EXTRA MATERIAL CONSULTED\\
 	Prove that your algorithm is correct and has the required time complexity.
 \end{comment}
 
+\begin{parcolumns}{2}
+
+\colchunk{
 \begin{algorithmic}[1]
 	\Function{MAXPATH}{$G$}
 		\ForAll{$v \in V$}
@@ -64,9 +70,9 @@ NO EXTRA MATERIAL CONSULTED\\
 		\State \Return max
 	\EndFunction
 \end{algorithmic}
+}
 
-\vspace{5mm}
-
+\colchunk{
 \begin{algorithmic}[1]
 	\Function{MAXSPATH}{$G, s$}
 		\ForAll{$u \in V$ such that $(s, u) \in E$}
@@ -82,6 +88,8 @@ NO EXTRA MATERIAL CONSULTED\\
 		\EndIf
 	\EndFunction
 \end{algorithmic}
+}
+\end{parcolumns}
 
 \vspace{5mm}
 
